@@ -28,9 +28,14 @@
       href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css"
       rel="stylesheet"
     />
+
+    <!-- Hammer -->
+    <script src="https://hammerjs.github.io/dist/hammer.js"></script>
+
     <!-- CSS File -->
     <link rel="stylesheet" href="style.css" />
 
+    <!-- Manifest.json for PWA -->
     <link rel="manifest" href="manifest.json" />
 
     <!-- ios support -->
@@ -73,7 +78,7 @@
     </nav>
     <div class="list">
       <div class="list-add-item invisible">
-        <div class="list-add-content">
+        <div id="list-add-content" class="list-add-content">
           <h3>Adicionar item na lista</h3>
           <form action="">
             <label for="category">Selecione a categoria</label>

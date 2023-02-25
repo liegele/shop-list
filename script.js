@@ -107,66 +107,89 @@ window.onscroll = function () {
 };
 
 //Swipe items for execute actions
+// items.forEach((item) => {
+//   item.addEventListener('touchstart', (e) => {
+//     e.target.dataset.x =
+//       Number(e.touches[0].pageX) + Number(e.target.dataset.move) || 0;
+//   });
+
+//   item.addEventListener('touchmove', (e) => {
+//     let moveX = Number(e.target.dataset.x) - e.touches[0].pageX;
+
+//     moveX > 130 ? (moveX = 130) : null;
+//     moveX < -130 ? (moveX = -130) : null;
+
+//     e.target.dataset.move = moveX;
+
+//     anime({
+//       targets: e.target,
+//       translateX: -Number(e.target.dataset.move),
+//       duration: 300,
+//     });
+//   });
+
+//   item.addEventListener('touchend', (e) => {
+//     let elementMove = e.target.dataset.move;
+
+//     if (elementMove > 100) elementMove = 100;
+//     else if (elementMove < -100) elementMove = -100;
+//     else elementMove = 0;
+
+//     items.forEach((item) => {
+//       let content = item.querySelector('.list-content');
+
+//       if (content === e.target) {
+//         return null;
+//       }
+
+//       content.dataset.x = 0;
+//       content.dataset.move = 0;
+
+//       anime({
+//         targets: content,
+//         translateX: 0,
+//       });
+//     });
+
+//     setTimeout(() => {
+//       anime({
+//         targets: e.target,
+//         translateX: -Number(elementMove),
+//       });
+//     }, 1);
+//   });
+// });
+
+//Trying Hammer...
+var myElement = document.getElementById('list-add-content');
+
+// create a simple instance
+// by default, it only adds horizontal recognizers
 items.forEach((item) => {
-  item.addEventListener('touchstart', (e) => {
-    e.target.dataset.x =
-      Number(e.touches[0].pageX) + Number(e.target.dataset.move) || 0;
-  });
-
-  item.addEventListener('touchmove', (e) => {
-    let moveX = Number(e.target.dataset.x) - e.touches[0].pageX;
-
-    moveX > 130 ? (moveX = 130) : null;
-    moveX < -130 ? (moveX = -130) : null;
-
-    e.target.dataset.move = moveX;
-
-    anime({
-      targets: e.target,
-      translateX: -Number(e.target.dataset.move),
-      duration: 300,
-    });
-  });
-
-  item.addEventListener('touchend', (e) => {
-    let elementMove = e.target.dataset.move;
-
-    if (elementMove > 100) elementMove = 100;
-    else if (elementMove < -100) elementMove = -100;
-    else elementMove = 0;
-
-    items.forEach((item) => {
-      let content = item.querySelector('.list-content');
-
-      if (content === e.target) {
-        return null;
-      }
-
-      content.dataset.x = 0;
-      content.dataset.move = 0;
-
-      anime({
-        targets: content,
-        translateX: 0,
-      });
-    });
-
-    setTimeout(() => {
-      anime({
-        targets: e.target,
-        translateX: -Number(elementMove),
-      });
-    }, 1);
+  var mc = new Hammer(item);
+  // listen to events...
+  mc.on('swipeleft swiperight tap', function (ev) {
+    // mc.on('swipe panleft panright tap press', function (ev) {
+    console.log(ev.type + ' gesture detected.' + ev.deltaX);
+    console.log(ev);
+    if (ev.deltaX >= 190) {
+      item.style.right = '-50px';
+    } else if (ev.deltaX <= -190) {
+      item.style.right = '50px';
+    }
+    if (ev.type === 'tap') {
+      item.style.right = '0px';
+    }
   });
 });
 
 //Registering serviveWorker.js.
 
-if ('serviceWorker' in navigator) {
+/* if ('serviceWorker' in navigator) {
   window.addEventListener('load', function () {
     navigator.serviceWorker
       .register('/serviceWorker.js')
       .then((res) => console.log('service worker registered'))
       .catch((err) => console.log('service worker not registered', err));
   });
-}
+} */
