@@ -1,0 +1,457 @@
+* {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  box-sizing: border-box;
+  font-family: 'Open Sans', sans-serif;
+}
+
+/* begin of navbar */
+
+.navbar {
+  z-index: 2;
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: auto;
+  background-color: #fff;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.navbar-bottom {
+  z-index: 2;
+  overflow: hidden;
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
+  height: 150px;
+  background-color: #fff;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  border-top-left-radius: 5%;
+  border-top-right-radius: 5%;
+  transition: bottom 0.3s;
+}
+
+.navbar-container {
+  display: flex;
+  height: 150px;
+  justify-content: center;
+  align-items: center;
+  align-content: space-around;
+}
+
+.navbar-container .navbar-item {
+  display: flex;
+  border-radius: 100%;
+  color: #fff;
+  width: 80px;
+  height: 80px;
+  background-color: #3096d1;
+  margin: 0px 15px;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+.navbar-container .navbar-item:hover {
+  background-color: #2c3e50;
+}
+
+/* .navbar a {
+  float: left;
+  display: block;
+  color: #2c3e50;
+  font-size: 22px;
+  padding: 10px;
+  text-decoration: none;
+} */
+
+/* end of navbar */
+
+body {
+  height: 100vh;
+  display: flex;
+  padding-top: 70px;
+  justify-content: center;
+  background-color: #d7dfe6;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+/* Change the diplay mode to NONE */
+.invisible {
+  display: none;
+}
+
+/* Set button background to dark color */
+.blue-color {
+  background-color: #3096d1;
+}
+
+/* Set button background to dark color */
+.dark-color {
+  background-color: #2c3e50;
+}
+
+div.scrollmenu {
+  background-color: #fff;
+  overflow: auto;
+  white-space: nowrap;
+  /* visibility: hidden; */
+}
+
+div.scrollmenu a {
+  display: inline-block;
+  color: #fff;
+  background-color: #3096d1;
+  text-align: center;
+  font-size: 15px;
+  margin: 15px 5px;
+  padding: 7px 15px;
+  text-decoration: none;
+  border-radius: 90px;
+  height: 40%;
+}
+
+div.scrollmenu a:hover {
+  background-color: #2c3e50;
+}
+
+.truncate {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.list {
+  width: 95%;
+}
+
+.list .list-item {
+  margin: 10px 0;
+  border-radius: 10px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.list .list-add-item {
+  margin: 10px 0;
+  border-radius: 10px;
+  position: relative;
+  z-index: 1;
+  background-color: #ffffff;
+  height: auto;
+}
+
+.list .list-add-content {
+  /* display: block; */
+  width: 100%;
+  z-index: 1;
+  padding: 12px;
+  /* background: #bebebe; */
+  border-radius: 10px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.04);
+  /* display: none; */
+}
+
+.list .list-content {
+  display: flex;
+  width: 100%;
+  z-index: 1;
+  padding: 12px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.04);
+  /* justify-content: space-between; */
+}
+
+.list .list-content .list-category-0 {
+  width: 15%;
+  pointer-events: none;
+  /* visibility: hidden; */
+  /* transition: 0.2s ease-in; */
+}
+
+.list .list-content .caption {
+  width: 100%;
+  min-height: 83px;
+  padding-left: 6px;
+  display: grid;
+  align-items: center;
+  /* justify-content: flex-start; */
+  justify-items: stretch;
+  pointer-events: none;
+}
+
+.list .amount {
+  /* .list .list-content .amount { */
+  color: #3096d1;
+  width: 5%;
+  justify-content: end;
+  pointer-events: none;
+  margin-top: 5px;
+  margin-right: 15px;
+}
+
+.list .amount-invisible {
+  display: none;
+}
+
+.list .list-content h5 {
+  color: #2c3e50;
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 0px;
+}
+
+.list .list-content p {
+  color: #3c5165;
+  font-size: 16px;
+  font-weight: 500;
+  margin-top: -25px;
+}
+
+.list .list-category-0 {
+  color: #3c5165;
+  margin-top: 15px;
+}
+
+.list .list-category-0-invisible {
+  display: none;
+}
+
+.list button {
+  cursor: pointer;
+  position: absolute;
+  width: 50%;
+  height: 80%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  border-radius: 10px;
+  transition: 0.2s ease-out;
+}
+
+.list button .list-icon {
+  width: 100px;
+  font-size: 30px;
+}
+
+.list .delete {
+  left: 10px;
+  color: #fff;
+  background: #ec395e;
+  justify-content: flex-start;
+}
+
+.list .delete-invisible {
+  display: none;
+}
+
+.list .settings {
+  right: 10px;
+  color: #fff;
+  background: #2c3e50;
+  /* background: #358ce2; */
+  justify-content: flex-end;
+}
+
+.list .settings-invisible {
+  display: none;
+}
+
+/* Begin of Add item form */
+
+form {
+  display: block;
+  margin-top: 15px;
+  width: 100%;
+  position: relative;
+  height: 230px;
+  overflow: hidden;
+}
+
+form input,
+form select {
+  width: 100%;
+  height: 40px;
+  color: #2c3e50;
+  font-size: 18px;
+  padding-left: 5px;
+  border: 1px solid #2c3e50;
+  /* background-color: #fff; */
+  border-radius: 5px;
+}
+
+#save-button,
+#clear-button {
+  display: inline;
+  position: relative;
+  float: right;
+  width: 100px;
+  height: 50px;
+  color: #fff;
+  font-size: 15px;
+  text-align: center;
+  /* padding: 0 0 0 5px; */
+  margin: 0 0 0 7px;
+  background-color: #3096d1;
+  border-radius: 5px;
+}
+
+#save-button:hover,
+#clear-button:hover {
+  background-color: #2c3e50;
+}
+
+.list-add-content button:hover {
+  background-color: #2c3e50;
+}
+
+/* .form label {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  border-bottom: 1px solid #2c3e50;
+}
+.form label::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  border-bottom: 3px solid #3096d1;
+  transform: translateX(-100%);
+  transition: all 0.3s ease;
+}
+
+.content-name {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  padding-bottom: 5px;
+  transition: all 0.3s ease;
+}
+.form input:focus {
+  outline: none;
+}
+.form input:focus + .label-name .content-name,
+.form input:valid + .label-name .content-name {
+  transform: translateY(-150%);
+  font-size: 14px;
+  left: 0px;
+  color: #3096d1;
+}
+.form input:focus + .label-name::after,
+.form input:valid + .label-name::after {
+  transform: translateX(0%);
+} */
+
+/* End of Add item form  */
+
+@media (min-width: 768px) {
+  .list {
+    width: 500px;
+  }
+  .list button .list-icon {
+    width: 65px;
+    font-size: 28px;
+  }
+
+  .list .list-item:hover .delete {
+    transform: translateX(-70px);
+  }
+
+  .list .list-item:hover .settings {
+    transform: translateX(70px);
+  }
+}
+
+@media (max-width: 389px) {
+  .list .list-content {
+    display: flex;
+    width: 100%;
+    z-index: 1;
+    padding: 10px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.04);
+  }
+
+  .list .list-content h5 {
+    color: #2c3e50;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 0px;
+  }
+
+  .list .list-content p {
+    color: #3c5165;
+    font-size: 14px;
+    font-weight: 500;
+    margin-top: -25px;
+  }
+}
+
+/* Galaxy fold */
+@media (max-width: 280px) {
+  .list .list-content {
+    display: flex;
+    width: 100%;
+    z-index: 1;
+    padding: 8px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.04);
+  }
+
+  .list .list-content h5 {
+    color: #2c3e50;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0px;
+  }
+
+  .list .list-content p {
+    color: #3c5165;
+    font-size: 14px;
+    font-weight: 500;
+    margin-top: -25px;
+  }
+
+  .list button .list-icon {
+    width: 100px;
+    font-size: 25px;
+  }
+
+  .list .list-content .list-category-0 {
+    width: 15%;
+    pointer-events: none;
+  }
+
+  .list .list-content .caption {
+    width: 80%;
+    padding-left: 15px;
+    display: grid;
+    align-items: center;
+    justify-content: flex-start;
+    pointer-events: none;
+  }
+
+  .list .list-content .amount {
+    color: #3c5165;
+    width: 5%;
+    justify-content: right;
+    pointer-events: none;
+    margin-top: 5px;
+    margin-right: 20px;
+  }
+}
