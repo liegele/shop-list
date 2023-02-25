@@ -160,7 +160,7 @@ items.forEach((item) => {
   });
 });
 
-//Registering serviveWorker.js
+//Registering serviveWorker.js.
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', function () {
