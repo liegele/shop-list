@@ -1,6 +1,7 @@
 {
   "name": "Shopping List PWA",
   "short_name": "ShopList",
+  "id": "index.html",
   "start_url": "index.html",
   "display": "standalone",
   "background_color": "#d7dfe6",
