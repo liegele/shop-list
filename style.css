@@ -147,6 +147,7 @@ div.scrollmenu a:hover {
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: transform 300ms ease-out;
 }
 
 .list .list-add-item {
@@ -154,7 +155,7 @@ div.scrollmenu a:hover {
   border-radius: 10px;
   position: relative;
   z-index: 1;
-  background-color: #ffffff;
+  background-color: #fff;
   height: auto;
 }
 
@@ -423,6 +424,10 @@ form select {
     font-size: 14px;
     font-weight: 500;
     margin-top: -25px;
+  }
+
+  .list .list-item {
+    transition: transform 300ms ease-out;
   }
 }
 

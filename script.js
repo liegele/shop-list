@@ -161,10 +161,10 @@ window.onscroll = function () {
 // });
 
 //Trying Hammer...
-var myElement = document.getElementById('list-add-content');
 
 // create a simple instance
 // by default, it only adds horizontal recognizers
+
 items.forEach((item) => {
   var mc = new Hammer(item);
   // listen to events...
@@ -172,13 +172,13 @@ items.forEach((item) => {
     // mc.on('swipe panleft panright tap press', function (ev) {
     console.log(ev.type + ' gesture detected.' + ev.deltaX);
     console.log(ev);
-    if (ev.deltaX >= 190) {
-      item.style.right = '-50px';
-    } else if (ev.deltaX <= -190) {
-      item.style.right = '50px';
+    if (ev.deltaX >= 25) {
+      ev.target.style.transform = 'translateX(100px)';
+    } else if (ev.deltaX <= -25) {
+      ev.target.style.transform = 'translateX(-100px)';
     }
     if (ev.type === 'tap') {
-      item.style.right = '0px';
+      ev.target.style.transform = 'translateX(0)';
     }
   });
 });
