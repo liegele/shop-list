@@ -171,15 +171,18 @@ items.forEach((item) => {
   mc.on('swipeleft swiperight tap', function (ev) {
     // mc.on('swipe panleft panright tap press', function (ev) {
     console.log(ev.type + ' gesture detected.' + ev.deltaX);
-    console.log(ev);
-    if (ev.deltaX >= 25) {
+    console.log(ev, currentMode);
+    if (ev.deltaX >= 25 && currentMode === 'add') {
       // ev.target.style.transform = 'translateX(100px)';
       anime({
         targets: ev.target,
         translateX: 100,
         duration: 300,
       });
-    } else if (ev.deltaX <= -25) {
+    } else if (
+      ev.deltaX <= -25 &&
+      (currentMode === 'select' || currentMode === 'shop')
+    ) {
       // ev.target.style.transform = 'translateX(-100px)';
       anime({
         targets: ev.target,
@@ -187,6 +190,20 @@ items.forEach((item) => {
         duration: 300,
       });
     }
+
+    items.forEach((item) => {
+      let content = item.querySelector('.list-content');
+
+      if (content === ev.target) {
+        return null;
+      }
+
+      anime({
+        targets: content,
+        translateX: 0,
+      });
+    });
+
     if (ev.type === 'tap') {
       // ev.target.style.transform = 'translateX(0)';
       anime({
