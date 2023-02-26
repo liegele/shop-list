@@ -48,7 +48,8 @@
   color: #fff;
   width: 60px;
   height: 60px;
-  background-color: #3096d1;
+  background-color: #2c3e50;
+  /* background-color: #3096d1; */
   margin: 0px 15px;
   align-items: center;
   justify-content: center;
@@ -116,7 +117,8 @@ div.scrollmenu::-webkit-scrollbar {
 div.scrollmenu a {
   display: inline-block;
   color: #fff;
-  background-color: #3096d1;
+  background-color: #2c3e50;
+  /* background-color: #3096d1; */
   text-align: center;
   font-size: 12px;
   margin: 10px 0px;
@@ -210,7 +212,8 @@ div.scrollmenu a:hover {
 .list .amount {
   display: flex;
   flex-wrap: wrap;
-  color: #3096d1;
+  color: #2c3e50;
+  /* color: #3096d1; */
   width: 5%;
   justify-content: end;
   align-content: center;
@@ -322,7 +325,8 @@ form select {
   text-align: center;
   /* padding: 0 0 0 5px; */
   margin: 0 0 0 7px;
-  background-color: #3096d1;
+  background-color: #2c3e50;
+  /* background-color: #3096d1; */
   border-radius: 5px;
 }
 
