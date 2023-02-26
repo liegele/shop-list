@@ -173,12 +173,27 @@ items.forEach((item) => {
     console.log(ev.type + ' gesture detected.' + ev.deltaX);
     console.log(ev);
     if (ev.deltaX >= 25) {
-      ev.target.style.transform = 'translateX(100px)';
+      // ev.target.style.transform = 'translateX(100px)';
+      anime({
+        targets: ev.target,
+        translateX: 100,
+        duration: 300,
+      });
     } else if (ev.deltaX <= -25) {
-      ev.target.style.transform = 'translateX(-100px)';
+      // ev.target.style.transform = 'translateX(-100px)';
+      anime({
+        targets: ev.target,
+        translateX: -100,
+        duration: 300,
+      });
     }
     if (ev.type === 'tap') {
-      ev.target.style.transform = 'translateX(0)';
+      // ev.target.style.transform = 'translateX(0)';
+      anime({
+        targets: ev.target,
+        translateX: 0,
+        duration: 300,
+      });
     }
   });
 });
