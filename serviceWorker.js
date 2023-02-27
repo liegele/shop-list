@@ -5,7 +5,7 @@ const assets = [
   '/style.css',
   '/script.js',
   '/assets/anime.min.js',
-  'assets/boxicons-2.1.4/css/boxicons.min.css',
+  '/assets/boxicons-2.1.4/css/boxicons.min.css',
 ];
 
 self.addEventListener('install', (installEvent) => {
