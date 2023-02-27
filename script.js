@@ -32,7 +32,6 @@ const toggleElements = (elementName, classIn, classOut) => {
 addItemsButton.addEventListener('click', () => {
   currentMode = mode[0];
   vibration();
-  showSnackbar('Modo: Adicionando itens');
   addItemsButton.classList.add('dark-color');
   toggleElements('settings-button', 'settings-invisible', 'settings');
   toggleElements('delete-button', 'delete', 'delete-invisible');
@@ -40,6 +39,7 @@ addItemsButton.addEventListener('click', () => {
   toggleElements('right-icon', 'amount-invisible', 'amount');
 
   slidedown.play();
+  showSnackbar('Modo: Adicionando itens');
 });
 
 //Clear button actions
@@ -75,12 +75,12 @@ selectItemsButton.addEventListener('click', () => {
   currentMode = mode[1];
   slideup.play();
   vibration();
-  showSnackbar('Modo: Selecionando itens');
   toggleElements('settings-button', 'settings', 'settings-invisible');
   toggleElements('delete-button', 'delete-invisible', 'delete');
   toggleElements('left-icon', 'list-category-0', 'list-category-0-invisible');
   toggleElements('left-icon', 'bx-checkbox', 'bx-cart');
   toggleElements('right-icon', 'amount', 'amount-invisible');
+  showSnackbar('Modo: Selecionando itens');
 });
 
 //------------------------------------------------------------
@@ -91,12 +91,12 @@ const makeShop = function () {
   currentMode = mode[2];
   slideup.play();
   vibration();
-  showSnackbar('Modo: Fazendo compras');
   toggleElements('settings-button', 'settings', 'settings-invisible');
   toggleElements('delete-button', 'delete-invisible', 'delete');
   toggleElements('left-icon', 'list-category-0', 'list-category-0-invisible');
   toggleElements('left-icon', 'bx-cart', 'bx-checkbox');
   toggleElements('right-icon', 'amount-invisible', 'amount');
+  showSnackbar('Modo: Fazendo compras');
   console.log('makeShop call...');
 };
 
