@@ -1,3 +1,9 @@
+//Array for MODE options [add, select, shop] available in application.
+const mode = ['add', 'select', 'shop'];
+
+//App will start on SHOP MODE.
+let currentMode = mode[2];
+
 //Setting DOM elements into variables to further manipulation
 const items = document.querySelectorAll('.list-item');
 const addItemsButton = document.getElementById('add-items');
@@ -8,12 +14,6 @@ const clearButton = document.getElementById('clear-button');
 const categorySelect = document.getElementById('category-select');
 const itemInput = document.getElementById('item-input');
 const snackbar = document.getElementById('snackbar');
-
-//Array for MODE options [add, select, shop] available in application.
-const mode = ['add', 'select', 'shop'];
-
-//App will start on SHOP MODE.
-let currentMode = mode[2];
 
 //Setting visibility of buttons according with chosen mode.
 const toggleElements = (elementName, classIn, classOut) => {
@@ -87,7 +87,7 @@ selectItemsButton.addEventListener('click', () => {
 //MAKE SHOP MODE
 //------------------------------------------------------------
 
-makeShopButton.addEventListener('click', () => {
+const makeShop = function () {
   currentMode = mode[2];
   slideup.play();
   vibration();
@@ -97,9 +97,15 @@ makeShopButton.addEventListener('click', () => {
   toggleElements('left-icon', 'list-category-0', 'list-category-0-invisible');
   toggleElements('left-icon', 'bx-cart', 'bx-checkbox');
   toggleElements('right-icon', 'amount-invisible', 'amount');
-});
+  console.log('makeShop call...');
+};
+
+makeShopButton.addEventListener('click', makeShop);
 
 //------------------------------------------------------------
+
+//Setting MakeShop mode as main view at starting up.
+window.document.addEventListener('DOMContentLoaded', makeShop);
 
 /* When the user scrolls down, hide the navbar. When the user scrolls up, show the navbar */
 let prevScrollpos = window.pageYOffset;
@@ -253,11 +259,11 @@ const showSnackbar = function (msg) {
 
 //Registering serviveWorker.js.
 
-if ('serviceWorker' in navigator) {
+/* if ('serviceWorker' in navigator) {
   window.addEventListener('load', function () {
     navigator.serviceWorker
       .register('/serviceWorker.js')
       .then((res) => console.log('service worker registered'))
       .catch((err) => console.log('service worker not registered', err));
   });
-}
+} */
