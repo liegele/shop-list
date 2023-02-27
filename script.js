@@ -7,6 +7,7 @@ const saveButton = document.getElementById('save-button');
 const clearButton = document.getElementById('clear-button');
 const categorySelect = document.getElementById('category-select');
 const itemInput = document.getElementById('item-input');
+const snackbar = document.getElementById('snackbar');
 
 //Array for MODE options [add, select, shop] available in application.
 const mode = ['add', 'select', 'shop'];
@@ -30,6 +31,8 @@ const toggleElements = (elementName, classIn, classOut) => {
 //Add button actions
 addItemsButton.addEventListener('click', () => {
   currentMode = mode[0];
+  vibration();
+  showSnackbar('Modo: Adicionando itens');
   addItemsButton.classList.add('dark-color');
   toggleElements('settings-button', 'settings-invisible', 'settings');
   toggleElements('delete-button', 'delete', 'delete-invisible');
@@ -71,6 +74,8 @@ let slideup = anime({
 selectItemsButton.addEventListener('click', () => {
   currentMode = mode[1];
   slideup.play();
+  vibration();
+  showSnackbar('Modo: Selecionando itens');
   toggleElements('settings-button', 'settings', 'settings-invisible');
   toggleElements('delete-button', 'delete-invisible', 'delete');
   toggleElements('left-icon', 'list-category-0', 'list-category-0-invisible');
@@ -85,6 +90,8 @@ selectItemsButton.addEventListener('click', () => {
 makeShopButton.addEventListener('click', () => {
   currentMode = mode[2];
   slideup.play();
+  vibration();
+  showSnackbar('Modo: Fazendo compras');
   toggleElements('settings-button', 'settings', 'settings-invisible');
   toggleElements('delete-button', 'delete-invisible', 'delete');
   toggleElements('left-icon', 'list-category-0', 'list-category-0-invisible');
@@ -172,7 +179,15 @@ items.forEach((item) => {
     // mc.on('swipe panleft panright tap press', function (ev) {
     console.log(ev.type + ' gesture detected.' + ev.deltaX);
     console.log(ev, currentMode);
-    if (ev.deltaX >= 25 && currentMode === 'add') {
+    if (ev.deltaX <= -25) {
+      // ev.target.style.transform = 'translateX(-100px)';
+      anime({
+        targets: ev.target,
+        translateX: -100,
+        duration: 300,
+      });
+    }
+    /* if (ev.deltaX >= 25 && currentMode === 'add') {
       // ev.target.style.transform = 'translateX(100px)';
       anime({
         targets: ev.target,
@@ -189,7 +204,7 @@ items.forEach((item) => {
         translateX: -100,
         duration: 300,
       });
-    }
+    } */
 
     items.forEach((item) => {
       let content = item.querySelector('.list-content');
@@ -204,7 +219,7 @@ items.forEach((item) => {
       });
     });
 
-    if (ev.type === 'tap') {
+    if (ev.type === 'tap' || ev.type === 'swiperight') {
       // ev.target.style.transform = 'translateX(0)';
       anime({
         targets: ev.target,
@@ -215,13 +230,34 @@ items.forEach((item) => {
   });
 });
 
+//Vibrating for 200ms.
+const vibration = function () {
+  if (navigator.vibration) {
+    window.navigator.vibrate(200);
+  }
+};
+
+//Snackbar
+const showSnackbar = function (msg) {
+  //Ad text message to div.
+  snackbar.innerText = msg;
+
+  // Add the "show" class to DIV
+  snackbar.className = 'show';
+
+  // After 3 seconds, remove the show class from DIV
+  setTimeout(function () {
+    snackbar.className = snackbar.className.replace('show', '');
+  }, 2500);
+};
+
 //Registering serviveWorker.js.
 
-if ('serviceWorker' in navigator) {
+/* if ('serviceWorker' in navigator) {
   window.addEventListener('load', function () {
     navigator.serviceWorker
       .register('/serviceWorker.js')
       .then((res) => console.log('service worker registered'))
       .catch((err) => console.log('service worker not registered', err));
   });
-}
+} */
