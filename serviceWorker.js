@@ -6,6 +6,10 @@ const assets = [
   './script.js',
   './assets/anime.min.js',
   './assets/boxicons-2.1.4/css/boxicons.min.css',
+  './assets/boxicons-2.1.4/fonts/boxicons.woff',
+  './assets/boxicons-2.1.4/fonts/boxicons.woff2',
+  './assets/boxicons-2.1.4/fonts/boxicons.ttf',
+  './assets/hammer.min.js',
 ];
 
 self.addEventListener('install', (installEvent) => {
