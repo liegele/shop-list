@@ -1,11 +1,11 @@
 const staticDevShopList = 'dev-shopList-v1';
 const assets = [
-  '/',
-  '/index.html',
-  '/style.css',
-  '/script.js',
-  '/assets/anime.min.js',
-  '/assets/boxicons-2.1.4/css/boxicons.min.css',
+  './',
+  './index.html',
+  './style.css',
+  './script.js',
+  './assets/anime.min.js',
+  './assets/boxicons-2.1.4/css/boxicons.min.css',
 ];
 
 self.addEventListener('install', (installEvent) => {
