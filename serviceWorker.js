@@ -9,7 +9,7 @@ const assets = [
   './assets/boxicons-2.1.4/fonts/boxicons.woff',
   './assets/boxicons-2.1.4/fonts/boxicons.woff2',
   './assets/boxicons-2.1.4/fonts/boxicons.ttf',
-  './assets/hammer.min.js',
+  './assets/hammer.js',
 ];
 
 self.addEventListener('install', (installEvent) => {
