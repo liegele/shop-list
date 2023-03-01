@@ -275,7 +275,7 @@ div.scrollmenu a:hover {
 
 .list .delete {
   right: 10px;
-  color: #c2c2c2;
+  color: #fff;
   background: #ec395e;
   justify-content: flex-end;
 }
@@ -286,7 +286,7 @@ div.scrollmenu a:hover {
 
 .list .settings {
   right: 10px;
-  color: #c2c2c2;
+  color: #fff;
   background: #3096d1;
   justify-content: flex-end;
 }
