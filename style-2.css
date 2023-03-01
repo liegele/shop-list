@@ -1,0 +1,588 @@
+* {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  box-sizing: border-box;
+  font-family: 'Open Sans', sans-serif;
+}
+
+/* begin of navbar */
+
+.navbar {
+  z-index: 2;
+  overflow: hidden;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: auto;
+  background-color: #323232;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.navbar-bottom {
+  z-index: 2;
+  overflow: hidden;
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
+  height: 90px;
+  background-color: #323232;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+  border-top-left-radius: 5%;
+  border-top-right-radius: 5%;
+  transition: bottom 0.3s;
+}
+
+.navbar-container {
+  display: flex;
+  height: 90px;
+  justify-content: center;
+  align-items: center;
+  align-content: space-around;
+}
+
+.navbar-container .navbar-item {
+  display: flex;
+  border-radius: 100%;
+  color: #fff;
+  width: 60px;
+  height: 60px;
+  background-color: #323232;
+  /* background-color: #3096d1; */
+  margin: 0px 15px;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+.navbar-container .navbar-item:hover {
+  background-color: #3096d1;
+}
+
+/* .navbar a {
+  float: left;
+  display: block;
+  color: #2c3e50;
+  font-size: 22px;
+  padding: 10px;
+  text-decoration: none;
+} */
+
+/* end of navbar */
+
+body {
+  height: 100vh;
+  display: flex;
+  padding-top: 55px;
+  justify-content: center;
+  background-color: #242424;
+  overflow-y: scroll;
+  overflow-x: hidden;
+}
+
+i {
+  margin-bottom: 5px;
+}
+
+/* Change the diplay mode to NONE */
+.invisible {
+  display: none;
+}
+
+/* Set button background to dark color */
+.blue-color {
+  background-color: #3096d1;
+}
+
+/* Set button background to dark color */
+.dark-color {
+  background-color: #323232;
+}
+
+div.scrollmenu {
+  background-color: #323232;
+  overflow: auto;
+  white-space: nowrap;
+  /* Hide scrollbar for IE, Edge and Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+div.scrollmenu::-webkit-scrollbar {
+  display: none;
+}
+
+div.scrollmenu a {
+  display: inline-block;
+  color: #fff;
+  background-color: #3096d1;
+  text-align: center;
+  font-size: 12px;
+  margin: 10px 0px;
+  padding: 8px 15px;
+  text-decoration: none;
+  border-radius: 90px;
+  height: 40%;
+}
+
+div.scrollmenu a:first-child {
+  margin-left: 10px;
+}
+
+div.scrollmenu a:last-child {
+  margin-right: 10px;
+}
+
+div.scrollmenu a:hover {
+  background-color: #3096d1;
+}
+
+.truncate {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.list {
+  width: 96%;
+}
+
+.list .list-item {
+  margin: 4px 0;
+  border-radius: 10px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 300ms ease-out;
+}
+
+.list .list-add-item {
+  margin: 3px 0;
+  border-radius: 10px;
+  position: relative;
+  z-index: 1;
+  background-color: #323232;
+  height: auto;
+}
+
+.list .list-add-content {
+  /* display: block; */
+  color: #d7d7d7;
+  width: 100%;
+  z-index: 1;
+  padding: 10px;
+  /* background: #bebebe; */
+  border-radius: 10px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.04);
+  /* display: none; */
+}
+
+.list .list-add-content h3 {
+  font-size: 20px;
+}
+
+.list .list-content {
+  display: flex;
+  width: 100%;
+  z-index: 1;
+  padding: 5px;
+  background: #4b4b4b;
+  border-radius: 10px;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.04);
+  /* justify-content: space-between; */
+}
+
+.list .list-content .list-category-0 {
+  width: 15%;
+  pointer-events: none;
+  /* visibility: hidden; */
+  /* transition: 0.2s ease-in; */
+}
+
+.list .list-content .caption {
+  width: 100%;
+  min-height: 55px;
+  padding-left: 6px;
+  margin-right: 10px;
+  display: grid;
+  align-items: center;
+  justify-items: stretch;
+  pointer-events: none;
+}
+
+.list .amount {
+  display: flex;
+  flex-wrap: wrap;
+  color: #d7d7d7;
+  /* color: #3096d1; */
+  width: 5%;
+  justify-content: end;
+  align-content: center;
+  justify-items: self-end;
+  pointer-events: none;
+  margin-top: 5px;
+  /* margin-right: 15px; */
+}
+
+.list .amount-invisible {
+  display: none;
+}
+
+.list .list-content h5 {
+  color: #d7d7d7;
+  /* color: #2c3e50; */
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: 0px;
+  padding-bottom: 2px;
+}
+
+.list .list-content p {
+  color: #d7d7d7;
+  font-size: 12px;
+  font-weight: 500;
+  margin-top: -25px;
+}
+
+.list .list-category-0 {
+  color: #d7d7d7;
+  margin-top: 15px;
+}
+
+.list .list-category-0-invisible {
+  display: none;
+}
+
+.list button {
+  cursor: pointer;
+  position: absolute;
+  width: 50%;
+  height: 80%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  border-radius: 10px;
+  transition: 0.2s ease-out;
+}
+
+.list button .list-icon {
+  width: 100px;
+  font-size: 25px;
+}
+
+.list .delete {
+  right: 10px;
+  color: #d7d7d7;
+  background: #ec395e;
+  justify-content: flex-end;
+}
+
+.list .delete-invisible {
+  display: none;
+}
+
+.list .settings {
+  right: 10px;
+  color: #d7d7d7;
+  background: #3096d1;
+  justify-content: flex-end;
+}
+
+.list .settings-invisible {
+  display: none;
+}
+
+/* Begin of Add item form */
+
+form {
+  display: block;
+  margin-top: 15px;
+  width: 100%;
+  position: relative;
+  height: 180px;
+  overflow: hidden;
+  font-size: 13px;
+}
+
+form input,
+form select {
+  width: 100%;
+  height: 30px;
+  color: #d7d7d7;
+  font-size: 15px;
+  padding-left: 5px;
+  border: 1px solid #4b4b4b;
+  background-color: #4b4b4b;
+  border-radius: 5px;
+}
+
+#save-button,
+#clear-button {
+  display: inline;
+  position: relative;
+  float: right;
+  width: 100px;
+  height: 40px;
+  color: #d7d7d7;
+  font-size: 13px;
+  text-align: center;
+  /* padding: 0 0 0 5px; */
+  margin: 0 0 0 7px;
+  background-color: #4b4b4b;
+  /* background-color: #3096d1; */
+  border-radius: 5px;
+}
+
+#save-button:hover,
+#clear-button:hover {
+  background-color: #3096d1;
+}
+
+.list-add-content button:hover {
+  background-color: #4b4b4b;
+}
+
+/* Begin of Snackbar */
+
+/* The snackbar - position it at the bottom and in the middle of the screen */
+#snackbar {
+  visibility: hidden; /* Hidden by default. Visible on click */
+  min-width: 250px; /* Set a default minimum width */
+  margin-left: -125px; /* Divide value of min-width by 2 */
+  background-color: #3096d1; /* Black background color */
+  color: #fff; /* White text color */
+  text-align: center; /* Centered text */
+  border-radius: 5px; /* Rounded borders */
+  padding: 7px; /* Padding */
+  position: fixed; /* Sit on top of the screen */
+  z-index: 1; /* Add a z-index if needed */
+  left: 50%; /* Center the snackbar */
+  bottom: 100px; /* 30px from the bottom */
+}
+
+/* Show the snackbar when clicking on a button (class added with JavaScript) */
+#snackbar.show {
+  visibility: visible; /* Show the snackbar */
+  /* Add animation: Take 0.5 seconds to fade in and out the snackbar.
+  However, delay the fade out process for 2.5 seconds */
+  -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+  animation: fadein 0.5s, fadeout 0.5s 2.5s;
+}
+
+/* Animations to fade the snackbar in and out */
+@-webkit-keyframes fadein {
+  from {
+    bottom: 0;
+    opacity: 0;
+  }
+  to {
+    bottom: 100px;
+    opacity: 1;
+  }
+}
+
+@keyframes fadein {
+  from {
+    bottom: 0;
+    opacity: 0;
+  }
+  to {
+    bottom: 100px;
+    opacity: 1;
+  }
+}
+
+@-webkit-keyframes fadeout {
+  from {
+    bottom: 100px;
+    opacity: 1;
+  }
+  to {
+    bottom: 0;
+    opacity: 0;
+  }
+}
+
+@keyframes fadeout {
+  from {
+    bottom: 100px;
+    opacity: 1;
+  }
+  to {
+    bottom: 0;
+    opacity: 0;
+  }
+}
+
+/* End of Snackbar */
+
+/* .form label {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  border-bottom: 1px solid #2c3e50;
+}
+.form label::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  border-bottom: 3px solid #3096d1;
+  transform: translateX(-100%);
+  transition: all 0.3s ease;
+}
+
+.content-name {
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  padding-bottom: 5px;
+  transition: all 0.3s ease;
+}
+.form input:focus {
+  outline: none;
+}
+.form input:focus + .label-name .content-name,
+.form input:valid + .label-name .content-name {
+  transform: translateY(-150%);
+  font-size: 14px;
+  left: 0px;
+  color: #3096d1;
+}
+.form input:focus + .label-name::after,
+.form input:valid + .label-name::after {
+  transform: translateX(0%);
+} */
+
+/* End of Add item form  */
+
+@media (min-width: 768px) {
+  .list {
+    width: 500px;
+  }
+  .list button .list-icon {
+    width: 65px;
+    font-size: 28px;
+  }
+
+  .list .list-item:hover .delete {
+    transform: translateX(-70px);
+  }
+
+  .list .list-item:hover .settings {
+    transform: translateX(70px);
+  }
+}
+
+@media (max-width: 389px) {
+  .list .list-content {
+    display: flex;
+    width: 100%;
+    z-index: 1;
+    padding: 5px;
+    background: #323232;
+    border-radius: 10px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.04);
+  }
+
+  .list .list-content h5 {
+    color: #d7d7d7;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: 0px;
+    padding-bottom: 2px;
+  }
+
+  .list .list-content .caption {
+    width: 100%;
+    min-height: 70px;
+    padding-left: 6px;
+    margin-right: 10px;
+    display: grid;
+    align-items: center;
+    justify-items: stretch;
+    pointer-events: none;
+  }
+
+  .list .list-content p {
+    color: #d7d7d7;
+    font-size: 14px;
+    font-weight: 500;
+    margin-top: -25px;
+  }
+
+  .list .list-item {
+    transition: transform 300ms ease-out;
+  }
+
+  div.scrollmenu a:first-child {
+    margin-left: 10px;
+  }
+
+  div.scrollmenu a:last-child {
+    margin-right: 10px;
+  }
+}
+
+/* Galaxy fold */
+@media (max-width: 280px) {
+  .list .list-content {
+    display: flex;
+    width: 100%;
+    z-index: 1;
+    padding: 8px;
+    background: #323232;
+    border-radius: 10px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.04);
+  }
+
+  .list .list-content h5 {
+    color: #d7d7d7;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: 0px;
+  }
+
+  .list .list-content p {
+    color: #d7d7d7;
+    font-size: 14px;
+    font-weight: 500;
+    margin-top: -25px;
+  }
+
+  .list button .list-icon {
+    width: 100px;
+    font-size: 25px;
+  }
+
+  .list .list-content .list-category-0 {
+    width: 15%;
+    pointer-events: none;
+  }
+
+  .list .list-content .caption {
+    width: 80%;
+    padding-left: 15px;
+    display: grid;
+    align-items: center;
+    justify-content: flex-start;
+    pointer-events: none;
+  }
+
+  .list .list-content .amount {
+    color: #d7d7d7;
+    width: 5%;
+    justify-content: right;
+    pointer-events: none;
+    margin-top: 5px;
+    margin-right: 20px;
+  }
+}
