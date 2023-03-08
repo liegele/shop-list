@@ -8,7 +8,8 @@ const mode = ['add', 'select', 'shop'];
 let currentMode = mode[1];
 
 //Setting DOM elements into variables to further manipulation
-const items = document.querySelectorAll('.list-item');
+// const items = document.querySelectorAll('.list-item');
+// console.log(items);
 const addItemsButton = document.getElementById('add-items');
 const selectItemsButton = document.getElementById('select-items');
 const makeShopButton = document.getElementById('make-shop');
@@ -50,25 +51,27 @@ let listItem = {
 };
 
 //Getting items from collection in Firestore
+let items;
 const getItems = function () {
   db.collection(userId)
     .orderBy('created', 'desc')
     .onSnapshot((snapshot) => {
       const data = snapshot.docs.map((item) => ({
+        id: item.id,
         ...item.data(),
       }));
       console.log(data);
       itemsHtml.innerHTML = '';
       for (let i = 0; i < data.length; i++) {
         let html = `
-        <div class="list-item">
+        <div class="list-item" data-id="${data[i].id}" data-category="${data[i].category}">
           <button name="settings-button" class="settings">
             <div class="list-icon">
               <i class="bx bx-list-check bx-md"></i>
             </div>
           </button>
           <div class="list-content">
-            <div name="left-icon" class="bx bx-cart bx-lg list-category-0"></div>
+            <div name="left-icon" class="bx bx-checkbox bx-lg list-category-0"></div>
             <div class="caption">
               <h5 class="truncate">${data[i].name}</h5>
               <p>Quantidade: ${data[i].amount}</p>
@@ -87,6 +90,8 @@ const getItems = function () {
         itemsHtml.insertAdjacentHTML('beforeend', html);
         console.log(data[i].name);
       }
+      //To querySelectorAll work and get all list-items in a NodeList().
+      settingSwipe();
     });
 };
 
@@ -133,12 +138,13 @@ let slideup = anime({
   },
 });
 
-//Add user data to collection using SET()
+//Function to add item data to collection using SET()
 const addListItem = function () {
   db.collection(userId).add(listItem);
   // getItems();
 };
 
+//Add item data to collection after click on save
 saveButton.addEventListener('click', (e) => {
   e.preventDefault();
   listItem.category = categorySelect.value;
@@ -202,45 +208,51 @@ window.onscroll = function () {
   prevScrollpos = currentScrollPos;
 };
 
-items.forEach((item) => {
-  var mc = new Hammer(item);
-  // listen to events...
-  mc.on('swipeleft swiperight tap', function (ev) {
-    // mc.on('swipe panleft panright tap press', function (ev) {
-    console.log(ev.type + ' gesture detected.' + ev.deltaX);
-    console.log(ev, currentMode);
-    if (ev.deltaX <= -25) {
-      // ev.target.style.transform = 'translateX(-100px)';
-      anime({
-        targets: ev.target,
-        translateX: -100,
-        duration: 300,
-      });
-    }
+//Function to Setting Swipe on List-Items
+const settingSwipe = function () {
+  items = document.querySelectorAll('.list-item');
 
-    items.forEach((item) => {
-      let content = item.querySelector('.list-content');
-
-      if (content === ev.target) {
-        return null;
+  //Adding swipe to items of the list
+  items.forEach((item) => {
+    let mc = new Hammer(item);
+    // listen to events...
+    mc.on('swipeleft swiperight tap', function (ev) {
+      // mc.on('swipe panleft panright tap press', function (ev) {
+      // console.log(ev.type + ' gesture detected.' + ev.deltaX);
+      // console.log(ev, currentMode);
+      if (ev.deltaX <= -25) {
+        // ev.target.style.transform = 'translateX(-100px)';
+        anime({
+          targets: ev.target,
+          translateX: -100,
+          duration: 300,
+        });
       }
 
-      anime({
-        targets: content,
-        translateX: 0,
-      });
-    });
+      items.forEach((item) => {
+        let content = item.querySelector('.list-content');
 
-    if (ev.type === 'tap' || ev.type === 'swiperight') {
-      // ev.target.style.transform = 'translateX(0)';
-      anime({
-        targets: ev.target,
-        translateX: 0,
-        duration: 300,
+        if (content === ev.target) {
+          return null;
+        }
+
+        anime({
+          targets: content,
+          translateX: 0,
+        });
       });
-    }
+
+      if (ev.type === 'tap' || ev.type === 'swiperight') {
+        // ev.target.style.transform = 'translateX(0)';
+        anime({
+          targets: ev.target,
+          translateX: 0,
+          duration: 300,
+        });
+      }
+    });
   });
-});
+};
 
 //Vibrating for 200ms.
 const vibration = function () {
@@ -265,14 +277,14 @@ const showSnackbar = function (msg) {
 
 //Registering serviveWorker.js.
 
-if ('serviceWorker' in navigator) {
+/* if ('serviceWorker' in navigator) {
   window.addEventListener('load', function () {
     navigator.serviceWorker
       .register('/serviceWorker.js')
       .then((res) => console.log('service worker registered'))
       .catch((err) => console.log('service worker not registered', err));
   });
-}
+} */
 
 /* let list = {
   created: firebase.firestore.FieldValue.serverTimestamp(),
