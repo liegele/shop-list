@@ -195,9 +195,13 @@ div.scrollmenu a:hover {
   /* justify-content: space-between; */
 }
 
+/* .list .list-content:last-child {
+  margin-bottom: 80px;
+} */
+
 .list .list-content .list-category-0 {
   width: 15%;
-  pointer-events: none;
+  /* pointer-events: none; */
   /* visibility: hidden; */
   /* transition: 0.2s ease-in; */
 }
@@ -494,6 +498,10 @@ form select {
     box-shadow: 0 0 30px rgba(0, 0, 0, 0.04);
   }
 
+  /* .list .list-content:last-child {
+    margin-bottom: 80px;
+  } */
+
   .list .list-content h5 {
     color: #c2c2c2;
     font-size: 20px;
@@ -566,7 +574,7 @@ form select {
 
   .list .list-content .list-category-0 {
     width: 15%;
-    pointer-events: none;
+    /* pointer-events: none; */
   }
 
   .list .list-content .caption {
