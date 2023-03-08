@@ -120,7 +120,7 @@ const getItems = (function () {
 
       currentMode === 'select' ? selectItems() : null;
 
-      //To querySelectorAll work and get all list-items in a NodeList().
+      //To querySelectorAll work and get all list-items in a NodeList()..
       settingSwipe();
     });
 })();
