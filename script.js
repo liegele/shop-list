@@ -52,7 +52,7 @@ let listItem = {
 
 //Getting items from collection in Firestore
 let items;
-const getItems = function () {
+const getItems = (function () {
   db.collection(userId)
     .orderBy('created', 'desc')
     .onSnapshot((snapshot) => {
@@ -64,14 +64,18 @@ const getItems = function () {
       itemsHtml.innerHTML = '';
       for (let i = 0; i < data.length; i++) {
         let html = `
-        <div class="list-item" data-id="${data[i].id}" data-category="${data[i].category}">
-          <button name="settings-button" class="settings">
+        <div class="list-item" data-category="${data[i].category}">
+          <button id="S${data[i].id}" name="settings-button" class="settings">
             <div class="list-icon">
               <i class="bx bx-list-check bx-md"></i>
             </div>
           </button>
           <div class="list-content">
-            <div name="left-icon" class="bx bx-checkbox bx-lg list-category-0"></div>
+            <div name="left-icon" class="bx ${
+              data[i].selected === 'true'
+                ? 'bxs-checkbox-checked'
+                : 'bx-checkbox'
+            } bx-lg list-category-0"></div>
             <div class="caption">
               <h5 class="truncate">${data[i].name}</h5>
               <p>Quantidade: ${data[i].amount}</p>
@@ -81,7 +85,7 @@ const getItems = function () {
               <i class="bx bx-minus-circle bx-sm"></i>
             </div>
           </div>
-          <button name="delete-button" class="delete">
+          <button id="D${data[i].id}" name="delete-button" class="delete">
             <div class="list-icon">
               <i class="bx bxs-trash"></i>
             </div>
@@ -89,11 +93,37 @@ const getItems = function () {
         </div>`;
         itemsHtml.insertAdjacentHTML('beforeend', html);
         console.log(data[i].name);
+
+        //Delete item list and Add event listener to DELETE button.
+        document
+          .getElementById(`D${data[i].id}`)
+          .addEventListener('click', (e) => {
+            db.collection(userId).doc(data[i].id).delete();
+            console.log('delete item');
+          });
+
+        //Selecting item from list in order able to put it in SHOPLIST
+        document
+          .getElementById(`S${data[i].id}`)
+          .addEventListener('click', (e) => {
+            db.collection(userId)
+              .doc(data[i].id)
+              .update({
+                selected: data[i].selected === 'true' ? 'false' : 'true',
+              });
+            console.log(
+              'select item: ',
+              data[i].selected === 'true' ? 'false' : 'true'
+            );
+          });
       }
+
+      currentMode === 'select' ? selectItems() : null;
+
       //To querySelectorAll work and get all list-items in a NodeList().
       settingSwipe();
     });
-};
+})();
 
 //------------------------------------------------------------
 //ADD ITEMS MODE
@@ -194,7 +224,7 @@ makeShopButton.addEventListener('click', makeShop);
 
 //Setting SelectItems mode as main view at starting up.
 window.document.addEventListener('DOMContentLoaded', getItems);
-window.addEventListener('load', selectItems);
+// window.addEventListener('load', selectItems);
 
 /* When the user scrolls down, hide the navbar. When the user scrolls up, show the navbar */
 let prevScrollpos = window.pageYOffset;
@@ -277,14 +307,14 @@ const showSnackbar = function (msg) {
 
 //Registering serviveWorker.js.
 
-if ('serviceWorker' in navigator) {
+/* if ('serviceWorker' in navigator) {
   window.addEventListener('load', function () {
     navigator.serviceWorker
       .register('/serviceWorker.js')
       .then((res) => console.log('service worker registered'))
       .catch((err) => console.log('service worker not registered', err));
   });
-}
+} */
 
 /* let list = {
   created: firebase.firestore.FieldValue.serverTimestamp(),
