@@ -63,12 +63,13 @@ const getItems = (function () {
       console.log(data);
       itemsHtml.innerHTML = '';
       for (let i = 0; i < data.length; i++) {
+        // <div class="list-icon">
+        //       <i class="bx bx-list-check bx-md"></i>
+        //     </div>
         let html = `
         <div class="list-item" data-category="${data[i].category}">
           <button id="S${data[i].id}" name="settings-button" class="settings">
-            <div class="list-icon">
-              <i class="bx bx-list-check bx-md"></i>
-            </div>
+            
           </button>
           <div class="list-content">
             <div name="left-icon" class="bx ${
