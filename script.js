@@ -102,7 +102,7 @@ const getItems = (function () {
             console.log('delete item');
           });
 
-        //Selecting item from list in order able to put it in SHOPLIST
+        //Selecting item from list in order to able to put it in SHOPLIST
         document
           .getElementById(`S${data[i].id}`)
           .addEventListener('click', (e) => {
@@ -259,7 +259,7 @@ const settingSwipe = function () {
         });
       }
 
-      items.forEach((item) => {
+      /* items.forEach((item) => {
         let content = item.querySelector('.list-content');
 
         if (content === ev.target) {
@@ -270,7 +270,7 @@ const settingSwipe = function () {
           targets: content,
           translateX: 0,
         });
-      });
+      }); */
 
       if (ev.type === 'swiperight') {
         // if (ev.type === 'tap' || ev.type === 'swiperight') {
@@ -308,14 +308,14 @@ const showSnackbar = function (msg) {
 
 //Registering serviveWorker.js.
 
-if ('serviceWorker' in navigator) {
+/* if ('serviceWorker' in navigator) {
   window.addEventListener('load', function () {
     navigator.serviceWorker
       .register('/serviceWorker.js')
       .then((res) => console.log('service worker registered'))
       .catch((err) => console.log('service worker not registered', err));
   });
-}
+} */
 
 /* let list = {
   created: firebase.firestore.FieldValue.serverTimestamp(),
