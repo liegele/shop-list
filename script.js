@@ -118,10 +118,10 @@ const getItems = (function () {
           });
       }
 
-      currentMode === 'select' ? selectItems() : null;
-
       //To querySelectorAll work and get all list-items in a NodeList()...
       settingSwipe();
+
+      currentMode === 'select' ? selectItems() : null;
     });
 })();
 
@@ -307,14 +307,14 @@ const showSnackbar = function (msg) {
 
 //Registering serviveWorker.js.
 
-if ('serviceWorker' in navigator) {
+/* if ('serviceWorker' in navigator) {
   window.addEventListener('load', function () {
     navigator.serviceWorker
       .register('/serviceWorker.js')
       .then((res) => console.log('service worker registered'))
       .catch((err) => console.log('service worker not registered', err));
   });
-}
+} */
 
 /* let list = {
   created: firebase.firestore.FieldValue.serverTimestamp(),
