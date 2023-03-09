@@ -18,7 +18,7 @@ const clearButton = document.getElementById('clear-button');
 const categorySelect = document.getElementById('category-select');
 const itemInput = document.getElementById('item-input');
 const snackbar = document.getElementById('snackbar');
-const itemsHtml = document.getElementById('items');
+let itemsHtml = document.getElementById('items');
 
 //Setting visibility of buttons according with chosen mode.
 const toggleElements = (elementName, classIn, classOut) => {
@@ -52,7 +52,133 @@ let listItem = {
 
 //Getting items from collection in Firestore
 let items;
-const getItems = (function () {
+const getItems = function () {
+  db.collection(userId)
+    .orderBy('created', 'desc')
+    .onSnapshot((snapshot) => {
+      snapshot.docChanges().forEach((change) => {
+        const data = { id: change.doc.id, ...change.doc.data() };
+        // console.log(data);
+        if (change.type === 'added') {
+          /* const data = snapshot.docs.map((item) => ({
+            id: item.id,
+            ...item.data(),
+          })); */
+
+          // itemsHtml.innerHTML = '';
+          // for (let i = 0; i < data.length; i++) {
+          let html = `
+            <div id="${data.id}" class="list-item" data-category="${
+            data.category
+          }">
+              <button id="S${data.id}" name="settings-button" class="settings">
+                <div class="list-icon">
+                  <i class="bx bx-list-check bx-md"></i>
+                </div>
+              </button>
+              <div class="list-content">
+                <div name="left-icon" class="bx ${
+                  data.selected === 'true'
+                    ? 'bxs-checkbox-checked'
+                    : 'bx-checkbox'
+                } bx-lg list-category-0"></div>
+                <div class="caption">
+                  <h5 class="truncate">${data.name}</h5>
+                  <p>Quantidade: ${data.amount}</p>
+                </div>
+                <div name="right-icon" class="amount">
+                  <i class="bx bx-plus-circle bx-sm"></i>
+                  <i class="bx bx-minus-circle bx-sm"></i>
+                </div>
+              </div>
+              <button id="D${data.id}" name="delete-button" class="delete">
+                <div class="list-icon">
+                  <i class="bx bxs-trash"></i>
+                </div>
+              </button>
+            </div>`;
+          // itemsHtml.innerHTML += html;
+          itemsHtml.insertAdjacentHTML('beforeend', html);
+          // console.log(data.name);
+
+          //Delete item list and Add event listener to DELETE button.
+          document
+            .getElementById(`D${data.id}`)
+            .addEventListener('click', (e) => {
+              db.collection(userId).doc(data.id).delete();
+              console.log('delete item');
+            });
+
+          //Selecting item from list in order to able to put it in SHOPLIST
+          document
+            .getElementById(`S${data.id}`)
+            .addEventListener('click', (e) => {
+              db.collection(userId)
+                .doc(data.id)
+                .update({
+                  selected: data.selected === 'true' ? 'false' : 'true',
+                });
+              console.log(
+                'select item: ',
+                data.selected === 'true' ? 'false' : 'true'
+              );
+            });
+          // }
+        }
+
+        if (change.type === 'modified') {
+          //maybe later select by MODE (select, select)...
+          const itemModified = document.getElementById(data.id);
+          console.log(data);
+          itemModified.innerHTML = `
+          <button id="S${data.id}" name="settings-button" class="settings">
+            <div class="list-icon">
+              <i class="bx bx-list-check bx-md"></i>
+            </div>
+          </button>
+          <div class="list-content">
+            <div name="left-icon" class="bx ${
+              data.selected === 'true' ? 'bxs-checkbox-checked' : 'bx-checkbox'
+            } bx-lg list-category-0"></div>
+            <div class="caption">
+              <h5 class="truncate">${data.name}</h5>
+              <p>Quantidade: ${data.amount}</p>
+            </div>
+            <div name="right-icon" class="amount">
+              <i class="bx bx-plus-circle bx-sm"></i>
+              <i class="bx bx-minus-circle bx-sm"></i>
+            </div>
+          </div>
+          <button id="D${data.id}" name="delete-button" class="delete">
+            <div class="list-icon">
+              <i class="bx bxs-trash"></i>
+            </div>
+          </button>`;
+          //Selecting item from list in order to able to put it in SHOPLIST
+          document
+            .getElementById(`S${data.id}`)
+            .addEventListener('click', (e) => {
+              db.collection(userId)
+                .doc(data.id)
+                .update({
+                  selected: data.selected === 'true' ? 'false' : 'true',
+                });
+              console.log(
+                'select item: ',
+                data.selected === 'true' ? 'false' : 'true'
+              );
+            });
+        }
+      });
+
+      //To querySelectorAll work and get all list-items in a NodeList()...
+      settingSwipe();
+
+      currentMode === 'select' ? selectItems() : null;
+    });
+};
+
+/* const getItems = function () {
   db.collection(userId)
     .orderBy('created', 'desc')
     .onSnapshot((snapshot) => {
@@ -123,7 +249,7 @@ const getItems = (function () {
 
       currentMode === 'select' ? selectItems() : null;
     });
-})();
+}; */
 
 //------------------------------------------------------------
 //ADD ITEMS MODE
