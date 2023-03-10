@@ -58,7 +58,7 @@ const getItems = function () {
     .onSnapshot((snapshot) => {
       snapshot.docChanges().forEach((change) => {
         const data = { id: change.doc.id, ...change.doc.data() };
-        console.log(data);
+        console.log('===> ', data);
         if (change.type === 'added') {
           /* const data = snapshot.docs.map((item) => ({
             id: item.id,
@@ -98,7 +98,7 @@ const getItems = function () {
               </button>
             </div>`;
           // itemsHtml.innerHTML += html;
-          itemsHtml.insertAdjacentHTML('afterbegin', html);
+          itemsHtml.insertAdjacentHTML('beforeend', html);
           // console.log(data.name);
 
           //Delete item list and Add event listener to DELETE button.
@@ -180,6 +180,17 @@ const getItems = function () {
       //To querySelectorAll work and get all list-items in a NodeList()...
       settingSwipe();
 
+      switch (currentMode) {
+        case 'add':
+          addItems();
+          break;
+        case 'select':
+          selectItems();
+          break;
+        case 'select':
+          makeShop();
+          break;
+      }
       currentMode === 'select' ? selectItems() : null;
     });
 };
@@ -262,7 +273,7 @@ const getItems = function () {
 //------------------------------------------------------------
 
 //Add button actions
-addItemsButton.addEventListener('click', () => {
+const addItems = function () {
   currentMode = mode[0];
   vibration();
   addItemsButton.classList.add('dark-color');
@@ -273,9 +284,22 @@ addItemsButton.addEventListener('click', () => {
   toggleElements('add-items', 'navbar-item-blue', 'navbar-item');
   toggleElements('select-items', 'navbar-item', 'navbar-item-blue');
   toggleElements('make-shop', 'navbar-item', 'navbar-item-blue');
+  window.scrollTo(0, 0);
+  // scrollingToStart();
   slidedown.play();
   showSnackbar('Modo: Adicionando itens');
-});
+};
+
+addItemsButton.addEventListener('click', addItems);
+
+//Scrolling to start of page.
+/* const scrollingToStart = function () {
+  window.scroll({
+    top: 0,
+    left: 0,
+    behavior: 'smooth',
+  });
+}; */
 
 //Clear button actions
 clearButton.addEventListener('click', () => {

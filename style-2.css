@@ -143,6 +143,7 @@ div.scrollmenu a {
 
 div.scrollmenu a:first-child {
   margin-left: 10px;
+  background-color: #3096d1;
 }
 
 div.scrollmenu a:last-child {
