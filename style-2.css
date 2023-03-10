@@ -56,6 +56,20 @@
   /* box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); */
 }
 
+.navbar-container .navbar-item-blue {
+  display: flex;
+  border-radius: 100%;
+  color: #fff;
+  width: 60px;
+  height: 60px;
+  /* background-color: #1d1d1d; */
+  background-color: #3096d1;
+  margin: 0px 15px;
+  align-items: center;
+  justify-content: center;
+  /* box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); */
+}
+
 .navbar-container .navbar-item:hover {
   background-color: #3096d1;
 }
@@ -156,7 +170,7 @@ div.scrollmenu a:hover {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: transform 300ms ease-out;
+  /* transition: transform 300ms ease-out; */
 }
 
 .list .list-add-item {
@@ -529,7 +543,7 @@ form select {
   }
 
   .list .list-item {
-    transition: transform 300ms ease-out;
+    /* transition: transform 300ms ease-out; */
   }
 
   div.scrollmenu a:first-child {

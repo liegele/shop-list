@@ -58,7 +58,7 @@ const getItems = function () {
     .onSnapshot((snapshot) => {
       snapshot.docChanges().forEach((change) => {
         const data = { id: change.doc.id, ...change.doc.data() };
-        // console.log(data);
+        console.log(data);
         if (change.type === 'added') {
           /* const data = snapshot.docs.map((item) => ({
             id: item.id,
@@ -98,7 +98,7 @@ const getItems = function () {
               </button>
             </div>`;
           // itemsHtml.innerHTML += html;
-          itemsHtml.insertAdjacentHTML('beforeend', html);
+          itemsHtml.insertAdjacentHTML('afterbegin', html);
           // console.log(data.name);
 
           //Delete item list and Add event listener to DELETE button.
@@ -168,6 +168,12 @@ const getItems = function () {
                 data.selected === 'true' ? 'false' : 'true'
               );
             });
+        }
+        if (change.type === 'removed') {
+          //Removing childNode from parentNode (items)
+          const parentItemRemoved = document.getElementById('items');
+          const itemRemoved = document.getElementById(data.id);
+          const nodeRemoved = parentItemRemoved.removeChild(itemRemoved);
         }
       });
 
@@ -264,6 +270,9 @@ addItemsButton.addEventListener('click', () => {
   toggleElements('delete-button', 'delete', 'delete-invisible');
   toggleElements('left-icon', 'list-category-0-invisible', 'list-category-0');
   toggleElements('right-icon', 'amount-invisible', 'amount');
+  toggleElements('add-items', 'navbar-item-blue', 'navbar-item');
+  toggleElements('select-items', 'navbar-item', 'navbar-item-blue');
+  toggleElements('make-shop', 'navbar-item', 'navbar-item-blue');
   slidedown.play();
   showSnackbar('Modo: Adicionando itens');
 });
@@ -322,6 +331,10 @@ const selectItems = function () {
   toggleElements('left-icon', 'list-category-0', 'list-category-0-invisible');
   toggleElements('left-icon', 'bx-checkbox', 'bx-cart');
   toggleElements('right-icon', 'amount', 'amount-invisible');
+  toggleElements('add-items', 'navbar-item', 'navbar-item-blue');
+  toggleElements('select-items', 'navbar-item-blue', 'navbar-item');
+  toggleElements('make-shop', 'navbar-item', 'navbar-item-blue');
+
   showSnackbar('Modo: Selecionando itens');
 };
 
@@ -340,6 +353,9 @@ const makeShop = function () {
   toggleElements('left-icon', 'list-category-0', 'list-category-0-invisible');
   toggleElements('left-icon', 'bx-cart', 'bx-checkbox');
   toggleElements('right-icon', 'amount-invisible', 'amount');
+  toggleElements('add-items', 'navbar-item', 'navbar-item-blue');
+  toggleElements('select-items', 'navbar-item', 'navbar-item-blue');
+  toggleElements('make-shop', 'navbar-item-blue', 'navbar-item');
   showSnackbar('Modo: Fazendo compras');
 };
 
