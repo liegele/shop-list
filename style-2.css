@@ -511,6 +511,8 @@ form select {
     background: #222222;
     border-radius: 10px;
     box-shadow: 0 0 30px rgba(0, 0, 0, 0.04);
+    animation-name: blue-animation;
+    animation-duration: 1.25s;
   }
 
   /* .list .list-content:last-child {
@@ -543,8 +545,24 @@ form select {
     margin-top: -25px;
   }
 
-  .list .list-item {
-    /* transition: transform 300ms ease-out; */
+  /*   .list .list-item {
+    animation-name: blue-animation;
+    animation-duration: 0.8s;
+  } */
+
+  @keyframes blue-animation {
+    0% {
+      background-color: #222222;
+      color: #c2c2c2;
+    }
+    50% {
+      background-color: #216c97;
+      color: #ffffff;
+    }
+    100% {
+      background-color: #222222;
+      color: #c2c2c2;
+    }
   }
 
   div.scrollmenu a:first-child {

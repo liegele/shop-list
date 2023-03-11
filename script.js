@@ -20,6 +20,36 @@ const itemInput = document.getElementById('item-input');
 const snackbar = document.getElementById('snackbar');
 let itemsHtml = document.getElementById('items');
 
+//Wakelock checking
+
+// Create a reference for the Wake Lock.
+let wakeLock = null;
+
+if ('wakeLock' in navigator) {
+}
+
+// create an async function to request a wake lock
+const wakeLockScreen = async function () {
+  try {
+    wakeLock = await navigator.wakeLock.request('screen');
+    // console.log('wake lock active...');
+  } catch (err) {
+    // The Wake Lock request has failed - usually system related, such as battery.
+    console.log(`${err.name}, ${err.message}`);
+  }
+};
+
+wakeLockScreen();
+
+//Reacquiring a wake lock after visibility change
+document.addEventListener('visibilitychange', async () => {
+  if (wakeLock !== null && document.visibilityState === 'visible') {
+    wakeLock = await navigator.wakeLock.request('screen');
+    // console.log(' ---> ', wakeLock);
+    // console.log('wake lock active...');
+  }
+});
+
 //Setting visibility of buttons according with chosen mode.
 const toggleElements = (elementName, classIn, classOut) => {
   document.getElementsByName(elementName).forEach((el, key) => {
@@ -158,6 +188,9 @@ const getItems = function () {
           document
             .getElementById(`S${data.id}`)
             .addEventListener('click', (e) => {
+              /* document.querySelector('.list-content')[0].style.animationName =
+                'blue-animation';
+              console.log('----->', document.getElementById(data.id)); */
               db.collection(userId)
                 .doc(data.id)
                 .update({
@@ -167,6 +200,7 @@ const getItems = function () {
                 'select item: ',
                 data.selected === 'true' ? 'false' : 'true'
               );
+              // blueAnimation.play();
             });
         }
         if (change.type === 'removed') {
@@ -191,7 +225,7 @@ const getItems = function () {
           makeShop();
           break;
       }
-      currentMode === 'select' ? selectItems() : null;
+      // currentMode === 'select' ? selectItems() : null;
     });
 };
 
@@ -287,7 +321,7 @@ const addItems = function () {
   window.scrollTo(0, 0);
   // scrollingToStart();
   slidedown.play();
-  showSnackbar('Modo: Adicionando itens');
+  showSnackbar('Modo: Adicionando itens', true);
 };
 
 addItemsButton.addEventListener('click', addItems);
@@ -305,6 +339,15 @@ addItemsButton.addEventListener('click', addItems);
 clearButton.addEventListener('click', () => {
   categorySelect.value = itemInput.value = '';
 });
+
+/* let blueAnimation = anime
+  .timeline({
+    endDelay: 1000,
+    easing: 'easeInOutQuad',
+    direction: 'alternate',
+    loop: true,
+  })
+  .add({ targets: '.list-content', background: '#3096d1' }, 0); */
 
 let slidedown = anime({
   targets: '.list-add-item',
@@ -457,7 +500,7 @@ const vibration = function () {
 };
 
 //Snackbar
-const showSnackbar = function (msg) {
+const showSnackbar = function (msg, show) {
   //Ad text message to div.
   snackbar.innerText = msg;
 
