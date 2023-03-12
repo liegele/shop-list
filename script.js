@@ -467,7 +467,7 @@ const settingSwipe = function () {
         });
       }
 
-      items.forEach((item) => {
+      /* items.forEach((item) => {
         let content = item.querySelector('.list-content');
 
         if (content === ev.target) {
@@ -478,7 +478,7 @@ const settingSwipe = function () {
           targets: content,
           translateX: 0,
         });
-      });
+      }); */
 
       if (ev.type === 'tap' || ev.type === 'swiperight') {
         // ev.target.style.transform = 'translateX(0)';
