@@ -454,7 +454,8 @@ const settingSwipe = function () {
   items.forEach((item) => {
     let mc = new Hammer(item);
     // listen to events...
-    mc.on('swipeleft swiperight tap', function (ev) {
+    mc.on('swipeleft swiperight', function (ev) {
+      // mc.on('swipeleft swiperight tap', function (ev) {
       // mc.on('swipe panleft panright tap press', function (ev) {
       // console.log(ev.type + ' gesture detected.' + ev.deltaX);
       // console.log(ev, currentMode);
@@ -480,7 +481,8 @@ const settingSwipe = function () {
         });
       }); */
 
-      if (ev.type === 'tap' || ev.type === 'swiperight') {
+      if (ev.type === 'swiperight') {
+        // if (ev.type === 'tap' || ev.type === 'swiperight') {
         // ev.target.style.transform = 'translateX(0)';
         anime({
           targets: ev.target,
