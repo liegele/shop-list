@@ -463,7 +463,7 @@ const settingSwipe = function () {
         anime({
           targets: ev.target,
           translateX: -100,
-          duration: 300,
+          duration: 0,
         });
       }
 
@@ -485,7 +485,7 @@ const settingSwipe = function () {
         anime({
           targets: ev.target,
           translateX: 0,
-          duration: 300,
+          duration: 0,
         });
       }
     });
