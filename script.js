@@ -454,8 +454,7 @@ const settingSwipe = function () {
   items.forEach((item) => {
     let mc = new Hammer(item);
     // listen to events...
-    mc.on('swipeleft swiperight', function (ev) {
-      // mc.on('swipeleft swiperight tap', function (ev) {
+    mc.on('swipeleft swiperight tap', function (ev) {
       // mc.on('swipe panleft panright tap press', function (ev) {
       // console.log(ev.type + ' gesture detected.' + ev.deltaX);
       // console.log(ev, currentMode);
@@ -464,11 +463,11 @@ const settingSwipe = function () {
         anime({
           targets: ev.target,
           translateX: -100,
-          duration: 0,
+          duration: 300,
         });
       }
 
-      /* items.forEach((item) => {
+      items.forEach((item) => {
         let content = item.querySelector('.list-content');
 
         if (content === ev.target) {
@@ -479,15 +478,14 @@ const settingSwipe = function () {
           targets: content,
           translateX: 0,
         });
-      }); */
+      });
 
-      if (ev.type === 'swiperight') {
-        // if (ev.type === 'tap' || ev.type === 'swiperight') {
+      if (ev.type === 'tap' || ev.type === 'swiperight') {
         // ev.target.style.transform = 'translateX(0)';
         anime({
           targets: ev.target,
           translateX: 0,
-          duration: 0,
+          duration: 300,
         });
       }
     });
@@ -512,7 +510,7 @@ const showSnackbar = function (msg, show) {
   // After 3 seconds, remove the show class from DIV
   setTimeout(function () {
     snackbar.className = snackbar.className.replace('show', '');
-  }, 0);
+  }, 3000);
 };
 
 //Registering serviveWorker.js.
