@@ -510,7 +510,7 @@ const showSnackbar = function (msg, show) {
   // After 3 seconds, remove the show class from DIV
   setTimeout(function () {
     snackbar.className = snackbar.className.replace('show', '');
-  }, 3000);
+  }, 0);
 };
 
 //Registering serviveWorker.js.
