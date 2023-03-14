@@ -4,6 +4,22 @@ let userId = 'liegele@gmail.com';
 //Array for MODE options [add, select, shop] available in application.
 const mode = ['add', 'select', 'shop'];
 
+//Categories
+const category = [
+  'Hortifruti',
+  'Padaria',
+  'Carnes e Aves',
+  'Importados',
+  'Bebidas',
+  'Frios e Laticínios',
+  'Mercearia',
+  'Limpeza',
+  'Congelados',
+  'Higiene e Beleza',
+  'Petshop',
+  'Utensílios Domésticos',
+];
+
 //App will start on SELECT MODE.
 let currentMode = mode[1];
 
@@ -84,11 +100,12 @@ let listItem = {
 let items;
 const getItems = function () {
   db.collection(userId)
-    .orderBy('created', 'desc')
+    .orderBy('category', 'desc')
     .onSnapshot((snapshot) => {
       snapshot.docChanges().forEach((change) => {
         const data = { id: change.doc.id, ...change.doc.data() };
         console.log('===> ', data);
+
         if (change.type === 'added') {
           /* const data = snapshot.docs.map((item) => ({
             id: item.id,
@@ -114,7 +131,7 @@ const getItems = function () {
                 } bx-lg list-category-0"></div>
                 <div class="caption">
                   <h5 class="truncate">${data.name}</h5>
-                  <p>Quantidade: ${data.amount}</p>
+                  <p>${category[data.category]}</p>
                 </div>
                 <div name="right-icon" class="amount">
                   <i class="bx bx-plus-circle bx-sm"></i>
@@ -128,7 +145,7 @@ const getItems = function () {
               </button>
             </div>`;
           // itemsHtml.innerHTML += html;
-          itemsHtml.insertAdjacentHTML('beforeend', html);
+          itemsHtml.insertAdjacentHTML('afterbegin', html);
           // console.log(data.name);
 
           //Delete item list and Add event listener to DELETE button.
@@ -153,6 +170,9 @@ const getItems = function () {
                 data.selected === 'true' ? 'false' : 'true'
               );
             });
+
+          // Add Swipe to items
+          settingSwipe(data.id);
           // }
         }
 
@@ -172,7 +192,7 @@ const getItems = function () {
             } bx-lg list-category-0"></div>
             <div class="caption">
               <h5 class="truncate">${data.name}</h5>
-              <p>Quantidade: ${data.amount}</p>
+              <p>${category[data.category]}</p>
             </div>
             <div name="right-icon" class="amount">
               <i class="bx bx-plus-circle bx-sm"></i>
@@ -202,6 +222,9 @@ const getItems = function () {
               );
               // blueAnimation.play();
             });
+
+          // Add Swipe to items
+          settingSwipe(data.id);
         }
         if (change.type === 'removed') {
           //Removing childNode from parentNode (items)
@@ -212,7 +235,7 @@ const getItems = function () {
       });
 
       //To querySelectorAll work and get all list-items in a NodeList()...
-      settingSwipe();
+      // settingSwipe();
 
       switch (currentMode) {
         case 'add':
@@ -447,7 +470,53 @@ window.onscroll = function () {
 };
 
 //Function to Setting Swipe on List-Items
-const settingSwipe = function () {
+const settingSwipe = function (item) {
+  // items = document.querySelectorAll('.list-item');
+
+  //Getting item by ID
+  item = document.getElementById(item);
+
+  //Adding swipe to items of the list
+  let mc = new Hammer(item);
+  // listen to events...
+  mc.on('swipeleft swiperight', function (ev) {
+    // mc.on('swipe panleft panright tap press', function (ev) {
+    // console.log(ev.type + ' gesture detected.' + ev.deltaX);
+    // console.log(ev, currentMode);
+    if (ev.deltaX <= -25) {
+      // ev.target.style.transform = 'translateX(-100px)';
+      anime({
+        targets: ev.target,
+        translateX: -100,
+        duration: 300,
+      });
+    }
+
+    /* items.forEach((item) => {
+      let content = item.querySelector('.list-content');
+
+      if (content === ev.target) {
+        return null;
+      }
+
+      anime({
+        targets: content,
+        translateX: 0,
+      });
+    }); */
+
+    if (ev.type === 'swiperight') {
+      // ev.target.style.transform = 'translateX(0)';
+      anime({
+        targets: ev.target,
+        translateX: 0,
+        duration: 300,
+      });
+    }
+  });
+};
+
+/* const settingSwipe = function () {
   items = document.querySelectorAll('.list-item');
 
   //Adding swipe to items of the list
@@ -491,6 +560,7 @@ const settingSwipe = function () {
     });
   });
 };
+ */
 
 //Vibrating for 200ms.
 const vibration = function () {
