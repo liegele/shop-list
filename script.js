@@ -41,9 +41,6 @@ let itemsHtml = document.getElementById('items');
 // Create a reference for the Wake Lock.
 let wakeLock = null;
 
-if ('wakeLock' in navigator) {
-}
-
 // create an async function to request a wake lock
 const wakeLockScreen = async function () {
   try {
@@ -148,32 +145,34 @@ const getItems = function () {
           itemsHtml.insertAdjacentHTML('afterbegin', html);
           // console.log(data.name);
 
-          //Delete item list and Add event listener to DELETE button.
-          document
-            .getElementById(`D${data.id}`)
-            .addEventListener('click', (e) => {
-              db.collection(userId).doc(data.id).delete();
-              console.log('delete item');
-            });
+          settingListItemEventListener(data.id, data.selected);
 
-          //Selecting item from list in order to able to put it in SHOPLIST
-          document
-            .getElementById(`S${data.id}`)
-            .addEventListener('click', (e) => {
-              db.collection(userId)
-                .doc(data.id)
-                .update({
-                  selected: data.selected === 'true' ? 'false' : 'true',
-                });
-              console.log(
-                'select item: ',
-                data.selected === 'true' ? 'false' : 'true'
-              );
-            });
+          // //Ading event listener to DELETE button.
+          // document
+          //   .getElementById(`D${data.id}`)
+          //   .addEventListener('click', (e) => {
+          //     db.collection(userId).doc(data.id).delete();
+          //     console.log('delete item');
+          //   });
 
-          // Add Swipe to items
-          settingSwipe(data.id);
-          // }
+          // //Selecting item from list in order to able to put it in SHOPLIST
+          // document
+          //   .getElementById(`S${data.id}`)
+          //   .addEventListener('click', (e) => {
+          //     db.collection(userId)
+          //       .doc(data.id)
+          //       .update({
+          //         selected: data.selected === 'true' ? 'false' : 'true',
+          //       });
+          //     console.log(
+          //       'select item: ',
+          //       data.selected === 'true' ? 'false' : 'true'
+          //     );
+          //   });
+
+          // // Add Swipe to items
+          // settingSwipe(data.id);
+          // // }
         }
 
         if (change.type === 'modified') {
@@ -204,27 +203,38 @@ const getItems = function () {
               <i class="bx bxs-trash"></i>
             </div>
           </button>`;
-          //Selecting item from list in order to able to put it in SHOPLIST
-          document
-            .getElementById(`S${data.id}`)
-            .addEventListener('click', (e) => {
-              /* document.querySelector('.list-content')[0].style.animationName =
-                'blue-animation';
-              console.log('----->', document.getElementById(data.id)); */
-              db.collection(userId)
-                .doc(data.id)
-                .update({
-                  selected: data.selected === 'true' ? 'false' : 'true',
-                });
-              console.log(
-                'select item: ',
-                data.selected === 'true' ? 'false' : 'true'
-              );
-              // blueAnimation.play();
-            });
 
-          // Add Swipe to items
-          settingSwipe(data.id);
+          settingListItemEventListener(data.id, data.selected);
+
+          // //Ading event listener to DELETE button.
+          // document
+          //   .getElementById(`D${data.id}`)
+          //   .addEventListener('click', (e) => {
+          //     db.collection(userId).doc(data.id).delete();
+          //     console.log('delete item');
+          //   });
+
+          // //Selecting item from list in order to able to put it in SHOPLIST
+          // document
+          //   .getElementById(`S${data.id}`)
+          //   .addEventListener('click', (e) => {
+          //     /* document.querySelector('.list-content')[0].style.animationName =
+          //       'blue-animation';
+          //     console.log('----->', document.getElementById(data.id)); */
+          //     db.collection(userId)
+          //       .doc(data.id)
+          //       .update({
+          //         selected: data.selected === 'true' ? 'false' : 'true',
+          //       });
+          //     console.log(
+          //       'select item: ',
+          //       data.selected === 'true' ? 'false' : 'true'
+          //     );
+          //     // blueAnimation.play();
+          //   });
+
+          // // Add Swipe to items
+          // settingSwipe(data.id);
         }
         if (change.type === 'removed') {
           //Removing childNode from parentNode (items)
@@ -250,6 +260,28 @@ const getItems = function () {
       }
       // currentMode === 'select' ? selectItems() : null;
     });
+};
+
+const settingListItemEventListener = function (idData, selectedData) {
+  //Ading event listener to DELETE button.
+  document.getElementById(`D${idData}`).addEventListener('click', (e) => {
+    db.collection(userId).doc(idData).delete();
+    console.log('delete item');
+  });
+
+  //Selecting item from list in order to able to put it in SHOPLIST
+  document.getElementById(`S${idData}`).addEventListener('click', (e) => {
+    db.collection(userId)
+      .doc(idData)
+      .update({
+        selected: selectedData === 'true' ? 'false' : 'true',
+      });
+    console.log('select item: ', selectedData === 'true' ? 'false' : 'true');
+  });
+
+  // Add Swipe to items
+  settingSwipe(idData);
+  // }
 };
 
 /* const getItems = function () {
@@ -571,16 +603,14 @@ const vibration = function () {
 
 //Snackbar
 const showSnackbar = function (msg, show) {
-  //Ad text message to div.
-  snackbar.innerText = msg;
-
-  // Add the "show" class to DIV
-  snackbar.className = 'show';
-
-  // After 3 seconds, remove the show class from DIV
-  setTimeout(function () {
-    snackbar.className = snackbar.className.replace('show', '');
-  }, 3000);
+  // //Ad text message to div.
+  // snackbar.innerText = msg;
+  // // Add the "show" class to DIV
+  // snackbar.className = 'show';
+  // // After 3 seconds, remove the show class from DIV
+  // setTimeout(function () {
+  //   snackbar.className = snackbar.className.replace('show', '');
+  // }, 3000);
 };
 
 //Registering serviveWorker.js.
