@@ -516,12 +516,12 @@ const settingSwipe = function (item) {
     // console.log(ev.type + ' gesture detected.' + ev.deltaX);
     // console.log(ev, currentMode);
     if (ev.deltaX <= -25) {
-      // ev.target.style.transform = 'translateX(-100px)';
-      anime({
+      ev.target.style.transform = 'translateX(-100px)';
+      /* anime({
         targets: ev.target,
         translateX: -100,
         duration: 300,
-      });
+      }); */
     }
 
     /* items.forEach((item) => {
@@ -538,12 +538,12 @@ const settingSwipe = function (item) {
     }); */
 
     if (ev.type === 'swiperight') {
-      // ev.target.style.transform = 'translateX(0)';
-      anime({
+      ev.target.style.transform = 'translateX(0)';
+      /* anime({
         targets: ev.target,
         translateX: 0,
         duration: 300,
-      });
+      }); */
     }
   });
 };
