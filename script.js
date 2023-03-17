@@ -128,9 +128,10 @@ const itemListComponent = function (
 
 //Getting items from collection in Firestore
 let items;
-const getItems = function (categoryID, condition) {
+const getItems = function (categoryID, condition, order) {
   itemsHtml.innerHTML = '';
   db.collection(userId)
+    .orderBy(`${order}`, 'desc')
     .where('category', `${condition}`, `${categoryID}`)
     // .orderBy('category', 'desc')
     .onSnapshot((snapshot) => {
@@ -369,7 +370,10 @@ makeShopButton.addEventListener('click', makeShop);
 //------------------------------------------------------------
 
 //Setting SelectItems mode as main view at starting up.
-window.document.addEventListener('DOMContentLoaded', getItems(0, '>='));
+window.document.addEventListener(
+  'DOMContentLoaded',
+  getItems(0, '>=', 'category')
+);
 
 //Defining function to filter list items according to category select.
 const filteredListItems = function () {
@@ -387,9 +391,9 @@ const filteredListItems = function () {
       console.log('Show category: ' + item.id);
       // const condition = item.id === '-1' ? '>=' : '==';
       if (item.id === '-1') {
-        getItems(0, '>=');
+        getItems(0, '>=', 'category');
       } else {
-        getItems(item.id, '==');
+        getItems(item.id, '==', 'name');
       }
       // console.log(condition);
       // getItems(item.id, condition);
