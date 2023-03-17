@@ -44,7 +44,7 @@
 
 .navbar-container .navbar-item {
   display: flex;
-  border-radius: 100%;
+  border-radius: 20%;
   color: #fff;
   width: 60px;
   height: 60px;
@@ -58,7 +58,7 @@
 
 .navbar-container .navbar-item-blue {
   display: flex;
-  border-radius: 100%;
+  border-radius: 20%;
   color: #fff;
   width: 60px;
   height: 60px;
@@ -99,7 +99,7 @@ i {
   margin-bottom: 5px;
 }
 
-/* Change the diplay mode to NONE */
+/* Change the display mode to NONE */
 .invisible {
   display: none;
 }
