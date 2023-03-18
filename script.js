@@ -1,6 +1,9 @@
 //Setting User
 let userId = 'liegele@gmail.com';
 
+//Flag for monitoring changes in data
+let anyChangeInData = false;
+
 //Array for MODE options [add, select, shop] available in application.
 const mode = ['add', 'select', 'shop'];
 
@@ -19,9 +22,6 @@ const category = [
   'Petshop',
   'Utensílios Domésticos',
 ];
-
-//App will start on SELECT MODE.
-let currentMode = mode[1];
 
 //Setting DOM elements into variables to further manipulation
 // const items = document.querySelectorAll('.list-item');
@@ -60,6 +60,9 @@ document.addEventListener('visibilitychange', async () => {
   if (wakeLock !== null && document.visibilityState === 'visible') {
     wakeLock = await navigator.wakeLock.request('screen');
   }
+  if (document.visibilityState !== 'visible') {
+    firebase.firestore().enableNetwork();
+  }
 });
 
 //Setting visibility of buttons according with chosen mode.
@@ -70,6 +73,14 @@ const toggleElements = (elementName, classIn, classOut) => {
       [key].classList.replace(classOut, classIn);
   });
 };
+
+//App will start on SELECT MODE.
+let currentMode = mode[1];
+
+//App will start with ALL categories selected
+let itemId = '-1';
+
+// toggleElements('select-items', 'navbar-item-blue', 'navbar-item');
 
 //Initialize Firebase FireStore
 firebase.initializeApp({
@@ -101,6 +112,24 @@ const itemListComponent = function (
   categoryData,
   nameData
 ) {
+  let fullIcon, emptyIcon;
+  switch (currentMode) {
+    case 'add':
+      fullIcon = 'bx-trash';
+      emptyIcon = 'bx-trash';
+      break;
+    case 'shop':
+      fullIcon = 'bxs-cart';
+      emptyIcon = 'bx-cart';
+      break;
+    case 'select':
+      fullIcon = 'bxs-shopping-bag';
+      emptyIcon = 'bx-shopping-bag';
+      break;
+  }
+
+  console.log(currentMode, emptyIcon, fullIcon);
+
   return `<button id="S${idData}" name="settings-button" class="settings">
             <div class="list-icon">
               <i class="bx bx-list-check bx-md"></i>
@@ -108,13 +137,13 @@ const itemListComponent = function (
           </button>
           <div class="list-content">
             <div name="left-icon" class="bx ${
-              selectedData === 'true' ? 'bxs-checkbox-checked' : 'bx-checkbox'
-            } bx-lg list-category-0"></div>
+              selectedData === 'true' ? fullIcon : emptyIcon
+            } bx-md list-category-0"></div>
             <div class="caption">
               <h5 class="truncate">${nameData}</h5>
               <p>${category[categoryData]}</p>
             </div>
-            <div name="right-icon" class="amount">
+            <div name="right-icon" class="amount-invisible">
               <i class="bx bx-plus-circle bx-sm"></i>
               <i class="bx bx-minus-circle bx-sm"></i>
             </div>
@@ -130,14 +159,24 @@ const itemListComponent = function (
 let items;
 const getItems = function (categoryID, condition, order) {
   itemsHtml.innerHTML = '';
+  let value1 = 'true';
+  let value2 = 'true';
+
+  if (currentMode === 'shop') {
+    value1 = 'true';
+    value2 = 'true';
+  } else {
+    value1 = 'true';
+    value2 = 'false';
+  }
+
   db.collection(userId)
     .orderBy(`${order}`, 'desc')
     .where('category', `${condition}`, `${categoryID}`)
-    // .orderBy('category', 'desc')
-    .onSnapshot((snapshot) => {
+    .where('selected', 'in', [`${value1}`, `${value2}`])
+    .onSnapshot({ includeMetadataChanges: true }, (snapshot) => {
       snapshot.docChanges().forEach((change) => {
         const data = { id: change.doc.id, ...change.doc.data() };
-        // console.log('===> ', data);
 
         if (change.type === 'added') {
           let html = `
@@ -151,10 +190,7 @@ const getItems = function (categoryID, condition, order) {
                 data.name
               )}
             </div>`;
-          // itemsHtml.innerHTML += html;
           itemsHtml.insertAdjacentHTML('afterbegin', html);
-          // console.log(data.name);
-
           settingListItemEventListener(data.id, data.selected);
         }
 
@@ -180,51 +216,65 @@ const getItems = function (categoryID, condition, order) {
         }
       });
 
+      let source = snapshot.metadata.fromCache ? 'local cache' : 'server';
+      console.log('Data came from ' + source);
+
+      //Data will be acessed from Local Cache
+      firebase.firestore().disableNetwork();
+
+      //Data will be acessed from Server
+      // firebase.firestore().enableNetwork();
+
       //To querySelectorAll work and get all list-items in a NodeList()...
       // settingSwipe();
 
       switch (currentMode) {
         case 'add':
-          addItems();
+          toggleElements('settings-button', 'settings-invisible', 'settings');
+          toggleElements('delete-button', 'delete', 'delete-invisible');
+          toggleElements(
+            'left-icon',
+            'list-category-0-invisible',
+            'list-category-0'
+          );
+          toggleElements('right-icon', 'amount-invisible', 'amount');
+          toggleElements('add-items', 'navbar-item-blue', 'navbar-item');
+          toggleElements('select-items', 'navbar-item', 'navbar-item-blue');
+          toggleElements('make-shop', 'navbar-item', 'navbar-item-blue'); /*  */
           break;
         case 'select':
-          selectItems();
+          toggleElements('settings-button', 'settings', 'settings-invisible');
+          toggleElements('delete-button', 'delete-invisible', 'delete');
+          toggleElements(
+            'left-icon',
+            'list-category-0',
+            'list-category-0-invisible'
+          );
+          toggleElements('left-icon', 'bx-shopping-bag', 'bx-cart');
+          toggleElements('left-icon', 'bxs-shopping-bag', 'bxs-cart');
+          toggleElements('right-icon', 'amount-invisible', 'amount');
+          toggleElements('add-items', 'navbar-item', 'navbar-item-blue');
+          toggleElements('select-items', 'navbar-item-blue', 'navbar-item');
+          toggleElements('make-shop', 'navbar-item', 'navbar-item-blue');
           break;
-        case 'select':
-          makeShop();
+        case 'shop':
+          toggleElements('settings-button', 'settings', 'settings-invisible');
+          toggleElements('delete-button', 'delete-invisible', 'delete');
+          toggleElements(
+            'left-icon',
+            'list-category-0',
+            'list-category-0-invisible'
+          );
+          toggleElements('left-icon', 'bx-cart', 'bx-shopping-bag');
+          toggleElements('left-icon', 'bxs-cart', 'bxs-shopping-bag');
+          toggleElements('right-icon', 'amount-invisible', 'amount');
+          toggleElements('add-items', 'navbar-item', 'navbar-item-blue');
+          toggleElements('select-items', 'navbar-item', 'navbar-item-blue');
+          toggleElements('make-shop', 'navbar-item-blue', 'navbar-item');
           break;
       }
-
-      // itemsHtmlCopy = itemsHtml.cloneNode(true);
-      // console.log(document.querySelector('#items').childElementCount);
-      // console.log('-----> ', itemsHtmlCopy.children.item(19).dataset.category);
-      // itemsHtml.innerHTML = '';
-      // filteredListItems('4');
-      // itemsToBeFiltered = document.querySelectorAll('.list-item');
-      // console.log('>>>>>> ', itemsToBeFiltered);
-      // currentMode === 'select' ? selectItems() : null;
-      // itemsToBeFiltered = document.getElementsByClassName('list-item');
     });
 };
-
-// console.log('OUT-----> ', itemsHtmlCopy.childElementCount);
-// console.log('-----> ', itemsHtmlCopy.children.item(19).dataset.category);
-
-//Defining function to filter list items according to category select.
-/* const filteredListItems = function (categoryID) {
-  document.getElementById('items').innerHTML = '';
-  const filters = document.querySelectorAll('.scrollmenu > a');
-  console.log(filters);
-  filters.forEach((item) => {
-    console.log(item);
-    item.addEventListener('click', () => {
-      getItems(item.id);
-    });
-  });
-  // getItems(categoryID);
-};
-
-filteredListItems('0'); */
 
 //Defining function to add eventlistener to list items.
 const settingListItemEventListener = function (idData, selectedData) {
@@ -260,17 +310,23 @@ const addItems = function () {
   currentMode = mode[0];
   vibration();
   addItemsButton.classList.add('dark-color');
-  toggleElements('settings-button', 'settings-invisible', 'settings');
+  /* toggleElements('settings-button', 'settings-invisible', 'settings');
   toggleElements('delete-button', 'delete', 'delete-invisible');
   toggleElements('left-icon', 'list-category-0-invisible', 'list-category-0');
   toggleElements('right-icon', 'amount-invisible', 'amount');
   toggleElements('add-items', 'navbar-item-blue', 'navbar-item');
   toggleElements('select-items', 'navbar-item', 'navbar-item-blue');
-  toggleElements('make-shop', 'navbar-item', 'navbar-item-blue');
+  toggleElements('make-shop', 'navbar-item', 'navbar-item-blue'); */
   window.scrollTo(0, 0);
   // scrollingToStart();
   slidedown.play();
   showSnackbar('Modo: Adicionando itens', true);
+
+  if (itemId === '-1') {
+    getItems(0, '>=', 'category');
+  } else {
+    getItems(itemId, '==', 'name');
+  }
 };
 
 addItemsButton.addEventListener('click', addItems);
@@ -309,7 +365,7 @@ let slideup = anime({
   },
 });
 
-//Function to add item data to collection using SET()
+//Function to add item data to collection
 const addListItem = function () {
   db.collection(userId).add(listItem);
 };
@@ -332,16 +388,22 @@ const selectItems = function () {
   currentMode = mode[1];
   slideup.play();
   vibration();
-  toggleElements('settings-button', 'settings', 'settings-invisible');
+  /* toggleElements('settings-button', 'settings', 'settings-invisible');
   toggleElements('delete-button', 'delete-invisible', 'delete');
   toggleElements('left-icon', 'list-category-0', 'list-category-0-invisible');
-  toggleElements('left-icon', 'bx-checkbox', 'bx-cart');
+  toggleElements('left-icon', 'bx-shopping-bag', 'bx-cart');
+  toggleElements('left-icon', 'bxs-shopping-bag', 'bxs-cart');
   toggleElements('right-icon', 'amount-invisible', 'amount');
   toggleElements('add-items', 'navbar-item', 'navbar-item-blue');
   toggleElements('select-items', 'navbar-item-blue', 'navbar-item');
-  toggleElements('make-shop', 'navbar-item', 'navbar-item-blue');
-
+  toggleElements('make-shop', 'navbar-item', 'navbar-item-blue'); */
   showSnackbar('Modo: Selecionando itens');
+
+  if (itemId === '-1') {
+    getItems(0, '>=', 'category');
+  } else {
+    getItems(itemId, '==', 'name');
+  }
 };
 
 selectItemsButton.addEventListener('click', selectItems);
@@ -354,15 +416,22 @@ const makeShop = function () {
   currentMode = mode[2];
   slideup.play();
   vibration();
-  toggleElements('settings-button', 'settings', 'settings-invisible');
+  /* toggleElements('settings-button', 'settings', 'settings-invisible');
   toggleElements('delete-button', 'delete-invisible', 'delete');
   toggleElements('left-icon', 'list-category-0', 'list-category-0-invisible');
-  toggleElements('left-icon', 'bx-cart', 'bx-checkbox');
+  toggleElements('left-icon', 'bx-cart', 'bx-shopping-bag');
+  toggleElements('left-icon', 'bxs-cart', 'bxs-shopping-bag');
   toggleElements('right-icon', 'amount-invisible', 'amount');
   toggleElements('add-items', 'navbar-item', 'navbar-item-blue');
   toggleElements('select-items', 'navbar-item', 'navbar-item-blue');
-  toggleElements('make-shop', 'navbar-item-blue', 'navbar-item');
+  toggleElements('make-shop', 'navbar-item-blue', 'navbar-item'); */
   showSnackbar('Modo: Fazendo compras');
+
+  if (itemId === '-1') {
+    getItems(0, '>=', 'category');
+  } else {
+    getItems(itemId, '==', 'name');
+  }
 };
 
 makeShopButton.addEventListener('click', makeShop);
@@ -376,6 +445,7 @@ window.document.addEventListener(
 );
 
 //Defining function to filter list items according to category select.
+
 const filteredListItems = function () {
   // document.getElementById('items').innerHTML = '';
   const filters = document.querySelectorAll('.scrollmenu > a');
@@ -388,8 +458,32 @@ const filteredListItems = function () {
   filters.forEach((item) => {
     // console.log(item);
     item.addEventListener('click', () => {
+      /* toggleElements(
+        document.getElementById(item.id),
+        'blue-button',
+        'dark-button'
+      ); */
+      document.querySelectorAll('a').forEach((menu) => {
+        console.log(menu.id, item.id);
+        itemId = item.id;
+        if (menu.id === item.id) {
+          document
+            .getElementById(menu.id)
+            .classList.replace('dark-button', 'blue-button');
+        } else {
+          document
+            .getElementById(menu.id)
+            .classList.replace('blue-button', 'dark-button');
+        }
+      });
+      /* document
+        .getElementById(item.id)
+        .classList.replace('dark-button', 'blue-button'); */
+
+      console.log(document.getElementById(item.id));
       console.log('Show category: ' + item.id);
       // const condition = item.id === '-1' ? '>=' : '==';
+      itemsHtml.innerHTML = '';
       if (item.id === '-1') {
         getItems(0, '>=', 'category');
       } else {

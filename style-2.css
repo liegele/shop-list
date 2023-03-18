@@ -53,6 +53,7 @@
   margin: 0px 15px;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
   /* box-shadow: 0 0 5px rgba(0, 0, 0, 0.3); */
 }
 
@@ -104,6 +105,11 @@ i {
   display: none;
 }
 
+/* Change the display mode to NONE */
+.visible {
+  display: flex;
+}
+
 /* Set button background to dark color */
 .blue-color {
   background-color: #3096d1;
@@ -141,16 +147,25 @@ div.scrollmenu a {
   height: 40%;
 }
 
-div.scrollmenu a:first-child {
-  margin-left: 10px;
+div.scrollmenu .blue-button {
   background-color: #3096d1;
 }
+
+div.scrollmenu .dark-button {
+  background-color: #1d1d1d;
+}
+
+/* div.scrollmenu a:first-child {
+  margin-left: 10px;
+  background-color: #3096d1;
+} */
 
 div.scrollmenu a:last-child {
   margin-right: 10px;
 }
 
 div.scrollmenu a:hover {
+  cursor: pointer;
   background-color: #3096d1;
 }
 
@@ -172,6 +187,10 @@ div.scrollmenu a:hover {
   align-items: center;
   justify-content: center;
   /* transition: transform 300ms ease-out; */
+}
+
+.list .list-item:last-child {
+  margin-bottom: 300px;
 }
 
 .list .list-add-item {
@@ -204,10 +223,15 @@ div.scrollmenu a:hover {
   width: 100%;
   z-index: 1;
   padding: 5px;
-  background: #4b4b4b;
+  background: #222222;
   border-radius: 10px;
   box-shadow: 0 0 30px rgba(0, 0, 0, 0.04);
-  /* justify-content: space-between; */
+  animation-name: blue-animation;
+  animation-duration: 1.25s;
+}
+
+.list .list-content:last-child {
+  margin-bottom: 300px;
 }
 
 /* .list .list-content:last-child {
@@ -437,57 +461,28 @@ form select {
   }
 }
 
+@keyframes blue-animation {
+  0% {
+    background-color: #222222;
+    color: #c2c2c2;
+  }
+  50% {
+    background-color: #216c97;
+    color: #ffffff;
+  }
+  100% {
+    background-color: #222222;
+    color: #c2c2c2;
+  }
+}
+
 /* End of Snackbar */
-
-/* .form label {
-  position: absolute;
-  bottom: 0px;
-  left: 0px;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  border-bottom: 1px solid #2c3e50;
-}
-.form label::after {
-  content: '';
-  position: absolute;
-  bottom: -1px;
-  left: 0px;
-  width: 100%;
-  height: 100%;
-  border-bottom: 3px solid #3096d1;
-  transform: translateX(-100%);
-  transition: all 0.3s ease;
-}
-
-.content-name {
-  position: absolute;
-  bottom: 0px;
-  left: 0px;
-  padding-bottom: 5px;
-  transition: all 0.3s ease;
-}
-.form input:focus {
-  outline: none;
-}
-.form input:focus + .label-name .content-name,
-.form input:valid + .label-name .content-name {
-  transform: translateY(-150%);
-  font-size: 14px;
-  left: 0px;
-  color: #3096d1;
-}
-.form input:focus + .label-name::after,
-.form input:valid + .label-name::after {
-  transform: translateX(0%);
-} */
-
-/* End of Add item form  */
 
 @media (min-width: 768px) {
   .list {
     width: 500px;
   }
+
   .list button .list-icon {
     width: 65px;
     font-size: 28px;
@@ -500,9 +495,42 @@ form select {
   .list .list-item:hover .settings {
     transform: translateX(70px);
   }
+
+  .list .list-content {
+    animation-name: blue-animation;
+    animation-duration: 1.25s;
+  }
+
+  /* .list .list-content:last-child {
+    background-color: #ec395e;
+    margin-bottom: 300px;
+  } */
+
+  /* .list .list-item:last-child {
+    margin-bottom: 300px;
+  } */
+
+  @keyframes blue-animation {
+    0% {
+      background-color: #222222;
+      color: #c2c2c2;
+    }
+    50% {
+      background-color: #216c97;
+      color: #ffffff;
+    }
+    100% {
+      background-color: #222222;
+      color: #c2c2c2;
+    }
+  }
 }
 
 @media (max-width: 389px) {
+  #items {
+    padding-bottom: 5px;
+  }
+
   .list .list-content {
     display: flex;
     width: 100%;
@@ -514,10 +542,6 @@ form select {
     animation-name: blue-animation;
     animation-duration: 1.25s;
   }
-
-  /* .list .list-content:last-child {
-    margin-bottom: 80px;
-  } */
 
   .list .list-content h5 {
     color: #c2c2c2;
