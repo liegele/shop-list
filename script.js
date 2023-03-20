@@ -60,9 +60,9 @@ document.addEventListener('visibilitychange', async () => {
   if (wakeLock !== null && document.visibilityState === 'visible') {
     wakeLock = await navigator.wakeLock.request('screen');
   }
-  if (document.visibilityState !== 'visible') {
+  /* if (document.visibilityState !== 'visible') {
     firebase.firestore().enableNetwork();
-  }
+  } */
 });
 
 //Setting visibility of buttons according with chosen mode.
@@ -128,7 +128,7 @@ const itemListComponent = function (
       break;
   }
 
-  console.log(currentMode, emptyIcon, fullIcon);
+  // console.log(`[${currentMode.toUpperCase()}]`);
 
   return `<button id="S${idData}" name="settings-button" class="settings">
             <div class="list-icon">
@@ -155,12 +155,10 @@ const itemListComponent = function (
           </button>`;
 };
 
-//Getting items from collection in Firestore
-let items;
-const getItems = function (categoryID, condition, order) {
+let myItemData = new Map();
+let j = 0;
+const gettingDataFromServer = function (categoryID, condition, order) {
   itemsHtml.innerHTML = '';
-  let value1 = 'true';
-  let value2 = 'true';
 
   if (currentMode === 'shop') {
     value1 = 'true';
@@ -169,16 +167,28 @@ const getItems = function (categoryID, condition, order) {
     value1 = 'true';
     value2 = 'false';
   }
-
-  db.collection(userId)
-    .orderBy(`${order}`, 'desc')
+  const unsub = db
+    .collection(userId)
+    .orderBy('category', 'desc')
+    // .orderBy(`${order}`, 'desc')
+    .orderBy('name', 'desc')
     .where('category', `${condition}`, `${categoryID}`)
     .where('selected', 'in', [`${value1}`, `${value2}`])
-    .onSnapshot({ includeMetadataChanges: true }, (snapshot) => {
+    .onSnapshot((snapshot) => {
+      //Keeping my items list in an array
+      // myItemData.clear();
       snapshot.docChanges().forEach((change) => {
-        const data = { id: change.doc.id, ...change.doc.data() };
-
+        // const data = { id: change.doc.id, ...change.doc.data() };
+        // console.log(data);
+        myItemData.set(change.doc.id, {
+          id: change.doc.id,
+          ...change.doc.data(),
+        });
+        // console.log(change.doc.id, change.doc.data());
+        const data = myItemData.get(change.doc.id);
+        // console.log('@>>>>>>>>>> ' + data.id);
         if (change.type === 'added') {
+          console.log('>>>> ADDED');
           let html = `
             <div id="${data.id}" class="list-item" data-category="${
             data.category
@@ -192,36 +202,48 @@ const getItems = function (categoryID, condition, order) {
             </div>`;
           itemsHtml.insertAdjacentHTML('afterbegin', html);
           settingListItemEventListener(data.id, data.selected);
+          // console.log('$$$$$', data.id, data.selected);
         }
 
         if (change.type === 'modified') {
+          console.log('>>>> MODIFIED');
           //maybe later select by MODE (select, select)...
           const itemModified = document.getElementById(data.id);
-          console.log(data);
-          itemModified.innerHTML = itemListComponent(
-            data.id,
-            data.selected,
-            data.category,
-            data.name
-          );
+          // console.log(data);
 
-          settingListItemEventListener(data.id, data.selected);
+          if (currentMode === 'shop' && data.selected === 'false') {
+            const parentItemRemoved = document.getElementById('items');
+            const itemRemoved = document.getElementById(data.id);
+            const nodeRemoved = parentItemRemoved.removeChild(itemRemoved);
+          } else {
+            itemModified.innerHTML = itemListComponent(
+              data.id,
+              data.selected,
+              data.category,
+              data.name
+            );
+            settingListItemEventListener(data.id, data.selected);
+          }
         }
 
         if (change.type === 'removed') {
+          console.log('>>>> REMOVED');
           //Removing childNode from parentNode (items)
           const parentItemRemoved = document.getElementById('items');
           const itemRemoved = document.getElementById(data.id);
           const nodeRemoved = parentItemRemoved.removeChild(itemRemoved);
         }
+        j++;
       });
 
       let source = snapshot.metadata.fromCache ? 'local cache' : 'server';
-      console.log('Data came from ' + source);
+      console.log('Data came from ' + source + ' || number of updates: ' + j);
+      j = 0;
 
       //Data will be acessed from Local Cache
-      firebase.firestore().disableNetwork();
-
+      // firebase.firestore().disableNetwork();
+      console.log('myItemData.size: ', myItemData.size);
+      // unsub();
       //Data will be acessed from Server
       // firebase.firestore().enableNetwork();
 
@@ -232,11 +254,11 @@ const getItems = function (categoryID, condition, order) {
         case 'add':
           toggleElements('settings-button', 'settings-invisible', 'settings');
           toggleElements('delete-button', 'delete', 'delete-invisible');
-          toggleElements(
-            'left-icon',
-            'list-category-0-invisible',
-            'list-category-0'
-          );
+          // toggleElements(
+          //   'left-icon',
+          //   'list-category-0-invisible',
+          //   'list-category-0'
+          // );
           toggleElements('right-icon', 'amount-invisible', 'amount');
           toggleElements('add-items', 'navbar-item-blue', 'navbar-item');
           toggleElements('select-items', 'navbar-item', 'navbar-item-blue');
@@ -291,6 +313,7 @@ const settingListItemEventListener = function (idData, selectedData) {
       .update({
         selected: selectedData === 'true' ? 'false' : 'true',
       });
+    console.log('------------------------------');
     console.log('select item: ', selectedData === 'true' ? 'false' : 'true');
   });
 
@@ -299,7 +322,90 @@ const settingListItemEventListener = function (idData, selectedData) {
   // }
 };
 
-// filteredListItems('0');
+const gettingDataFromMap = function (categoryID) {
+  itemsHtml.innerHTML = '';
+
+  myItemData.forEach((value, key) => {
+    if (
+      (value.category === categoryID || categoryID === '-1') &&
+      currentMode !== 'shop'
+    ) {
+      let html = `
+      <div id="${value.id}" class="list-item" data-category="${value.category}">
+        ${itemListComponent(
+          value.id,
+          value.selected,
+          value.category,
+          value.name
+        )}
+      </div>`;
+      itemsHtml.insertAdjacentHTML('afterbegin', html);
+      settingListItemEventListener(value.id, value.selected);
+    } else if (
+      currentMode === 'shop' &&
+      value.selected === 'true' &&
+      (value.category === categoryID || categoryID === '-1')
+    ) {
+      let html = `
+      <div id="${value.id}" class="list-item" data-category="${value.category}">
+        ${itemListComponent(
+          value.id,
+          value.selected,
+          value.category,
+          value.name
+        )}
+      </div>`;
+      itemsHtml.insertAdjacentHTML('afterbegin', html);
+      settingListItemEventListener(value.id, value.selected);
+    }
+  });
+
+  switch (currentMode) {
+    case 'add':
+      toggleElements('settings-button', 'settings-invisible', 'settings');
+      toggleElements('delete-button', 'delete', 'delete-invisible');
+      // toggleElements(
+      //   'left-icon',
+      //   'list-category-0-invisible',
+      //   'list-category-0'
+      // );
+      toggleElements('right-icon', 'amount-invisible', 'amount');
+      toggleElements('add-items', 'navbar-item-blue', 'navbar-item');
+      toggleElements('select-items', 'navbar-item', 'navbar-item-blue');
+      toggleElements('make-shop', 'navbar-item', 'navbar-item-blue'); /*  */
+      break;
+    case 'select':
+      toggleElements('settings-button', 'settings', 'settings-invisible');
+      toggleElements('delete-button', 'delete-invisible', 'delete');
+      toggleElements(
+        'left-icon',
+        'list-category-0',
+        'list-category-0-invisible'
+      );
+      toggleElements('left-icon', 'bx-shopping-bag', 'bx-cart');
+      toggleElements('left-icon', 'bxs-shopping-bag', 'bxs-cart');
+      toggleElements('right-icon', 'amount-invisible', 'amount');
+      toggleElements('add-items', 'navbar-item', 'navbar-item-blue');
+      toggleElements('select-items', 'navbar-item-blue', 'navbar-item');
+      toggleElements('make-shop', 'navbar-item', 'navbar-item-blue');
+      break;
+    case 'shop':
+      toggleElements('settings-button', 'settings', 'settings-invisible');
+      toggleElements('delete-button', 'delete-invisible', 'delete');
+      toggleElements(
+        'left-icon',
+        'list-category-0',
+        'list-category-0-invisible'
+      );
+      toggleElements('left-icon', 'bx-cart', 'bx-shopping-bag');
+      toggleElements('left-icon', 'bxs-cart', 'bxs-shopping-bag');
+      toggleElements('right-icon', 'amount-invisible', 'amount');
+      toggleElements('add-items', 'navbar-item', 'navbar-item-blue');
+      toggleElements('select-items', 'navbar-item', 'navbar-item-blue');
+      toggleElements('make-shop', 'navbar-item-blue', 'navbar-item');
+      break;
+  }
+};
 
 //------------------------------------------------------------
 //ADD ITEMS MODE
@@ -308,8 +414,9 @@ const settingListItemEventListener = function (idData, selectedData) {
 //Add button actions
 const addItems = function () {
   currentMode = mode[0];
-  vibration();
+  // console.log(currentMode);
   addItemsButton.classList.add('dark-color');
+  // vibration();
   /* toggleElements('settings-button', 'settings-invisible', 'settings');
   toggleElements('delete-button', 'delete', 'delete-invisible');
   toggleElements('left-icon', 'list-category-0-invisible', 'list-category-0');
@@ -317,15 +424,17 @@ const addItems = function () {
   toggleElements('add-items', 'navbar-item-blue', 'navbar-item');
   toggleElements('select-items', 'navbar-item', 'navbar-item-blue');
   toggleElements('make-shop', 'navbar-item', 'navbar-item-blue'); */
-  window.scrollTo(0, 0);
+  // showSnackbar('Modo: Adicionando itens', true);
   // scrollingToStart();
+  window.scrollTo(0, 0);
   slidedown.play();
-  showSnackbar('Modo: Adicionando itens', true);
 
   if (itemId === '-1') {
-    getItems(0, '>=', 'category');
+    // gettingDataFromServer(0, '>=', 'category');
+    gettingDataFromMap(itemId);
   } else {
-    getItems(itemId, '==', 'name');
+    // gettingDataFromServer(itemId, '==', 'name');
+    gettingDataFromMap(itemId);
   }
 };
 
@@ -386,8 +495,9 @@ saveButton.addEventListener('click', (e) => {
 
 const selectItems = function () {
   currentMode = mode[1];
+  // console.log(currentMode);
   slideup.play();
-  vibration();
+  // vibration();
   /* toggleElements('settings-button', 'settings', 'settings-invisible');
   toggleElements('delete-button', 'delete-invisible', 'delete');
   toggleElements('left-icon', 'list-category-0', 'list-category-0-invisible');
@@ -397,12 +507,14 @@ const selectItems = function () {
   toggleElements('add-items', 'navbar-item', 'navbar-item-blue');
   toggleElements('select-items', 'navbar-item-blue', 'navbar-item');
   toggleElements('make-shop', 'navbar-item', 'navbar-item-blue'); */
-  showSnackbar('Modo: Selecionando itens');
+  // showSnackbar('Modo: Selecionando itens');
 
   if (itemId === '-1') {
-    getItems(0, '>=', 'category');
+    // gettingDataFromServer(0, '>=', 'category');
+    gettingDataFromMap(itemId);
   } else {
-    getItems(itemId, '==', 'name');
+    // gettingDataFromServer(itemId, '==', 'name');
+    gettingDataFromMap(itemId);
   }
 };
 
@@ -414,23 +526,26 @@ selectItemsButton.addEventListener('click', selectItems);
 
 const makeShop = function () {
   currentMode = mode[2];
+  // console.log(currentMode);
   slideup.play();
-  vibration();
+  // vibration();
   /* toggleElements('settings-button', 'settings', 'settings-invisible');
   toggleElements('delete-button', 'delete-invisible', 'delete');
   toggleElements('left-icon', 'list-category-0', 'list-category-0-invisible');
   toggleElements('left-icon', 'bx-cart', 'bx-shopping-bag');
   toggleElements('left-icon', 'bxs-cart', 'bxs-shopping-bag');
   toggleElements('right-icon', 'amount-invisible', 'amount');
+  showSnackbar('Modo: Fazendo compras');
   toggleElements('add-items', 'navbar-item', 'navbar-item-blue');
   toggleElements('select-items', 'navbar-item', 'navbar-item-blue');
   toggleElements('make-shop', 'navbar-item-blue', 'navbar-item'); */
-  showSnackbar('Modo: Fazendo compras');
 
   if (itemId === '-1') {
-    getItems(0, '>=', 'category');
+    // gettingDataFromServer(0, '>=', 'category');
+    gettingDataFromMap(itemId);
   } else {
-    getItems(itemId, '==', 'name');
+    // gettingDataFromServer(itemId, '==', 'name');
+    gettingDataFromMap(itemId);
   }
 };
 
@@ -441,7 +556,7 @@ makeShopButton.addEventListener('click', makeShop);
 //Setting SelectItems mode as main view at starting up.
 window.document.addEventListener(
   'DOMContentLoaded',
-  getItems(0, '>=', 'category')
+  gettingDataFromServer(0, '>=', 'category')
 );
 
 //Defining function to filter list items according to category select.
@@ -451,20 +566,11 @@ const filteredListItems = function () {
   const filters = document.querySelectorAll('.scrollmenu > a');
   console.log(document.querySelector('#items').childElementCount);
 
-  for (const child of itemsHtml.children) {
-    console.log('---> ', i);
-  }
-
   filters.forEach((item) => {
     // console.log(item);
     item.addEventListener('click', () => {
-      /* toggleElements(
-        document.getElementById(item.id),
-        'blue-button',
-        'dark-button'
-      ); */
       document.querySelectorAll('a').forEach((menu) => {
-        console.log(menu.id, item.id);
+        // console.log(menu.id, item.id);
         itemId = item.id;
         if (menu.id === item.id) {
           document
@@ -476,21 +582,18 @@ const filteredListItems = function () {
             .classList.replace('blue-button', 'dark-button');
         }
       });
-      /* document
-        .getElementById(item.id)
-        .classList.replace('dark-button', 'blue-button'); */
 
-      console.log(document.getElementById(item.id));
-      console.log('Show category: ' + item.id);
+      // console.log(document.getElementById(item.id));
+      // console.log('Show category: ' + item.id);
       // const condition = item.id === '-1' ? '>=' : '==';
       itemsHtml.innerHTML = '';
       if (item.id === '-1') {
-        getItems(0, '>=', 'category');
+        // gettingDataFromServer(0, '>=', 'category');
+        gettingDataFromMap(itemId);
       } else {
-        getItems(item.id, '==', 'name');
+        // gettingDataFromServer(item.id, '==', 'name');
+        gettingDataFromMap(itemId);
       }
-      // console.log(condition);
-      // getItems(item.id, condition);
     });
   });
 };
@@ -564,16 +667,16 @@ const vibration = function () {
 };
 
 //Snackbar
-const showSnackbar = function (msg, show) {
-  // //Ad text message to div.
-  // snackbar.innerText = msg;
-  // // Add the "show" class to DIV
-  // snackbar.className = 'show';
-  // // After 3 seconds, remove the show class from DIV
-  // setTimeout(function () {
-  //   snackbar.className = snackbar.className.replace('show', '');
-  // }, 3000);
-};
+/* const showSnackbar = function (msg, show) {
+  //Ad text message to div.
+  snackbar.innerText = msg;
+  // Add the "show" class to DIV
+  snackbar.className = 'show';
+  // After 3 seconds, remove the show class from DIV
+  setTimeout(function () {
+    snackbar.className = snackbar.className.replace('show', '');
+  }, 3000);
+}; */
 
 //Registering serviveWorker.js.
 
