@@ -21,6 +21,7 @@ const category = [
   'Higiene e Beleza',
   'Petshop',
   'Utensílios Domésticos',
+  'Farmácia',
 ];
 
 //Setting DOM elements into variables to further manipulation
@@ -232,6 +233,7 @@ const gettingDataFromServer = function (categoryID, condition, order) {
           const parentItemRemoved = document.getElementById('items');
           const itemRemoved = document.getElementById(data.id);
           const nodeRemoved = parentItemRemoved.removeChild(itemRemoved);
+          myItemData.delete(data.id);
         }
         j++;
       });
@@ -576,6 +578,7 @@ const filteredListItems = function () {
           document
             .getElementById(menu.id)
             .classList.replace('dark-button', 'blue-button');
+          categorySelect.value = menu.id;
         } else {
           document
             .getElementById(menu.id)
