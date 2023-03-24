@@ -438,6 +438,7 @@ const addItems = function () {
     // gettingDataFromServer(itemId, '==', 'name');
     gettingDataFromMap(itemId);
   }
+  // itemInput.focus();
 };
 
 addItemsButton.addEventListener('click', addItems);
@@ -463,6 +464,7 @@ let slidedown = anime({
   autoplay: false,
   begin: function () {
     document.querySelector('.list-add-item').classList.remove('invisible');
+    itemInput.focus();
   },
 });
 
@@ -597,6 +599,7 @@ const filteredListItems = function () {
         // gettingDataFromServer(item.id, '==', 'name');
         gettingDataFromMap(itemId);
       }
+      itemInput.focus();
     });
   });
 };
