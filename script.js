@@ -464,7 +464,7 @@ let slidedown = anime({
   autoplay: false,
   begin: function () {
     document.querySelector('.list-add-item').classList.remove('invisible');
-    itemInput.focus();
+    // itemInput.focus();
   },
 });
 

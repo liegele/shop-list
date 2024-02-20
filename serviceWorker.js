@@ -1,4 +1,4 @@
-const staticDevShopList = 'dev-shopList-v0.0.1';
+const staticDevShopList = 'dev-shopList-v0.0.2';
 const assets = [
   './',
   './index.html',
